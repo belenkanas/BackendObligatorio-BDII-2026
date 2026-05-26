@@ -1,0 +1,15 @@
+# Ignorar archivos sensibles
+config_local.json
+.env
+
+# Ignorar archivos temporales de Python
+__pycache__/
+*.pyc
+*.log
+
+# Entorno virtual
+venv/
+.env/
+
+# Configuración de VSCode
+.vscode/
