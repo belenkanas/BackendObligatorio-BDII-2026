@@ -1,5 +1,4 @@
 # Ignorar archivos sensibles
-config_local.json
 .env
 
 # Ignorar archivos temporales de Python
