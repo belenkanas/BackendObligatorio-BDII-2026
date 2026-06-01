@@ -19,7 +19,8 @@ CREATE TABLE Usuario (
   
 CREATE TABLE Perfil (  
     id INT PRIMARY KEY,  
-    mailUsuario VARCHAR(100),  
+    mailUsuario VARCHAR(100),
+    contrasena VARCHAR(255) NOT NULL,  
     FOREIGN KEY (mailUsuario) REFERENCES Usuario(mail)  
 );  
   
