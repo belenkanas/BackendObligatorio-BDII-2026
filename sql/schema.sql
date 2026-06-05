@@ -7,7 +7,8 @@ USE obligatorio;
 -- =========================================  
   
 CREATE TABLE Usuario (  
-    mail VARCHAR(100) PRIMARY KEY,  
+    mail VARCHAR(100) PRIMARY KEY,
+    password VARCHAR(255) NOT NULL,  
     documento_tipo VARCHAR(20),  
     documento_numeroDoc VARCHAR(30),  
     direccion_calle VARCHAR(100),  
@@ -19,7 +20,8 @@ CREATE TABLE Usuario (
   
 CREATE TABLE Perfil (  
     id INT PRIMARY KEY,  
-    mailUsuario VARCHAR(100),  
+    mailUsuario VARCHAR(100),
+    contrasena VARCHAR(255) NOT NULL,  
     FOREIGN KEY (mailUsuario) REFERENCES Usuario(mail)  
 );  
   
