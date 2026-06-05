@@ -12,3 +12,7 @@ venv/
 
 # Configuración de VSCode
 .vscode/
+
+# Archivos generados por Maven/Spring Boot
+backend/target/
+backend/HELP.md
