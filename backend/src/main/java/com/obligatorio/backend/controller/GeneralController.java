@@ -34,11 +34,6 @@ public class GeneralController {
         return generalService.obtenerPorId(id);
     }
 
-    @GetMapping("/estado/{estado}")
-    public List<General> obtenerPorEstado(@PathVariable String estado) {
-        return generalService.obtenerPorEstado(estado);
-    }
-
     @PostMapping
     public General crear(@RequestBody General general) {
         return generalService.crear(general);

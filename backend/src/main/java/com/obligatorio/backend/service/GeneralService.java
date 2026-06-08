@@ -23,10 +23,6 @@ public class GeneralService {
         return generalRepository.findById(id);
     }
 
-    public List<General> obtenerPorEstado(String estado) {
-        return generalRepository.findByEstado_verificacion_id(estado);
-    }
-
     public General crear(General general) {
         return generalRepository.save(general);
     }

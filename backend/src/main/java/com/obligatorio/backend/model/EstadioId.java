@@ -12,6 +12,9 @@ public class EstadioId implements Serializable {
     private String direccion_pais;
     private String direccion_ciudad;
 
+    public EstadioId() {
+    }
+
     // Getters y Setters
     public String getNombre() { return nombre; }
     public void setNombre(String nombre) { this.nombre = nombre; }

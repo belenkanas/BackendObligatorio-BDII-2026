@@ -24,10 +24,6 @@ public class EstadioService {
         return estadioRepository.findById(id);
     }
 
-    public List<Estadio> obtenerPorPais(String pais) {
-        return estadioRepository.findByIdDireccion_pais(pais);
-    }
-
     public Estadio crear(Estadio estadio) {
         return estadioRepository.save(estadio);
     }
