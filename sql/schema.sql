@@ -19,9 +19,8 @@ CREATE TABLE Usuario (
 );  
   
 CREATE TABLE Perfil (  
-    id INT PRIMARY KEY,  
+    id INT AUTO_INCREMENT PRIMARY KEY,  
     mailUsuario VARCHAR(100),
-    contrasena VARCHAR(255) NOT NULL,  
     FOREIGN KEY (mailUsuario) REFERENCES Usuario(mail)  
 );  
   
@@ -46,7 +45,7 @@ CREATE TABLE General (
 );  
   
 CREATE TABLE DispositivoEscaneo (  
-    id INT PRIMARY KEY,  
+    id INT AUTO_INCREMENT PRIMARY KEY,  
     nrolegajo VARCHAR(20)  
 );  
   
@@ -147,7 +146,7 @@ CREATE TABLE SectorEvento (
 );  
   
 CREATE TABLE Venta (  
-    id_venta INT PRIMARY KEY,  
+    id_venta INT AUTO_INCREMENT PRIMARY KEY,  
     fecha_hora TIMESTAMP,  
     comision DECIMAL(10,2),  
     costoFinal DECIMAL(10,2),  
@@ -159,7 +158,7 @@ CREATE TABLE Venta (
 );  
   
 CREATE TABLE Entrada (  
-    id INT PRIMARY KEY,  
+    id INT AUTO_INCREMENT PRIMARY KEY,  
     estado VARCHAR(30),  
   
     nombre_sector VARCHAR(50),  
