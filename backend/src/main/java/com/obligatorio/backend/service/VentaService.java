@@ -23,8 +23,8 @@ public class VentaService {
         return ventaRepository.findById(id); 
     }
     
-    public List<Venta> obtenerPorGeneral(Integer idGeneral) { 
-        return ventaRepository.findByGeneralIdGeneral(idGeneral); 
+    public List<Venta> obtenerPorGeneral(Integer idGeneral) {
+    return ventaRepository.findByIdGeneral(idGeneral);
     }
     
     public Venta crear(Venta venta) { 

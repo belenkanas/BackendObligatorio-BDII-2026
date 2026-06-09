@@ -1,24 +1,24 @@
 package com.obligatorio.backend.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
-
 import java.io.Serializable;
 import java.util.Objects;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 
 @Embeddable
 public class SectorId implements Serializable {
 
-    @Column(name = "nombre")
+    @Column(name = "nombre", length = 50)
     private String nombre;
 
-    @Column(name = "estadioNombre")
+    @Column(name = "estadioNombre", length = 50)
     private String estadioNombre;
 
-    @Column(name = "estadioDireccionPais")
+    @Column(name = "estadioDireccionPais", length = 50)
     private String estadioDireccionPais;
 
-    @Column(name = "estadioDireccionCiudad")
+    @Column(name = "estadioDireccionCiudad", length = 50)
     private String estadioDireccionCiudad;
 
     public SectorId() {
