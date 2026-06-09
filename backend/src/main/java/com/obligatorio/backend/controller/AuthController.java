@@ -1,6 +1,7 @@
 package com.obligatorio.backend.controller;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.obligatorio.backend.model.General;
 import com.obligatorio.backend.model.Perfil;
 import com.obligatorio.backend.model.Usuario;
+import com.obligatorio.backend.service.AdministradorService;
+import com.obligatorio.backend.service.FuncionarioService;
 import com.obligatorio.backend.service.GeneralService;
 import com.obligatorio.backend.service.PerfilService;
 import com.obligatorio.backend.service.UsuarioService;
@@ -34,6 +37,12 @@ public class AuthController {
 
     @Autowired
     private GeneralService generalService;
+
+    @Autowired
+    private AdministradorService administradorService;
+
+    @Autowired
+    private FuncionarioService funcionarioService;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -88,8 +97,25 @@ public class AuthController {
             return ResponseEntity.status(401).body("Mail o contraseña incorrectos");
         }
 
+        List<Perfil> perfiles = perfilService.obtenerPorUsuario(mail);
+        if (perfiles.isEmpty()) {
+            return ResponseEntity.status(401).body("Usuario sin perfil asignado");
+        }
+
+        Perfil perfil = perfiles.get(0);
+        Integer idPerfil = perfil.getId();
+
+        String rol = "GENERAL";
+        if (administradorService.obtenerPorId(idPerfil).isPresent()) {
+            rol = "ADMINISTRADOR";
+        } else if (funcionarioService.obtenerPorId(idPerfil).isPresent()) {
+            rol = "FUNCIONARIO";
+        }
+
         return ResponseEntity.ok(Map.of(
             "mail", usuario.getMail(),
+            "idPerfil", idPerfil,
+            "rol", rol,
             "mensaje", "Login exitoso"
         ));
     }
