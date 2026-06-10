@@ -105,9 +105,6 @@ curl -X POST http://localhost:8080/auth/registro \
 
 ## Estructura del proyecto
 
-```
-
----
 
 ## Tecnologías
 
