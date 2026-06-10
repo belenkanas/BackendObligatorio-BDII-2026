@@ -1,0 +1,16 @@
+-- Usuario de prueba (contraseña: 1234)
+-- Ejecutar con el backend corriendo en localhost:8080
+
+-- curl -X POST http://localhost:8080/auth/registro \
+--   -H "Content-Type: application/json" \
+--   -d '{
+--     "mail": "test@test.com",
+--     "password": "1234",
+--     "documentoTipo": "CI",
+--     "documentoNumeroDoc": "22222222",
+--     "direccionCalle": "Av. Italia",
+--     "direccionNumero": "100",
+--     "direccionCodigoPostal": "11600",
+--     "direccionPais": "Uruguay",
+--     "direccionLocalidad": "Montevideo"
+--   }'
