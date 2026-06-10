@@ -101,60 +101,10 @@ curl -X POST http://localhost:8080/auth/registro \
 - Mail: `test@test.com`
 - Contraseña: `1234`
 
----
 
-## 6. Levantar el frontend
-
-```bash
-cd frontend
-npm install
-npx expo start
-```
-
-Opciones al iniciar Expo:
-- Presionar `a` para abrir en emulador Android
-- Presionar `i` para abrir en simulador iOS (solo macOS)
-- Presionar `w` para abrir en navegador web
-- Escanear el QR con la app **Expo Go** en tu celular
-
----
-
-## Endpoints principales
-
-| Método | Ruta | Descripción |
-|--------|------|-------------|
-| POST | `/auth/registro` | Registrar nuevo usuario |
-| POST | `/auth/login` | Iniciar sesión |
-| GET | `/eventos` | Listar eventos disponibles |
-| GET | `/entradas` | Listar entradas |
-| POST | `/ventas` | Crear una venta |
-| GET | `/sectores` | Listar sectores |
-| GET | `/estadios` | Listar estadios |
-| GET | `/equipos` | Listar equipos |
-| GET | `/partidos` | Listar partidos |
-
----
 
 ## Estructura del proyecto
 
-```
-.
-├── backend/                  # API REST (Spring Boot + Java 21)
-│   ├── src/main/java/        # Código fuente
-│   │   └── com/obligatorio/backend/
-│   │       ├── controller/   # Endpoints REST
-│   │       ├── model/        # Entidades JPA
-│   │       ├── repository/   # Repositorios Spring Data
-│   │       └── service/      # Lógica de negocio
-│   └── src/main/resources/
-│       └── application.properties
-├── frontend/                 # App móvil (React Native + Expo)
-│   └── src/app/              # Pantallas (login, registro, eventos)
-├── sql/
-│   └── schema.sql            # Script de creación de la base de datos
-├── mer/                      # Diagramas MER (draw.io)
-├── docker-compose.yml
-└── .env                      # Variables de entorno (no commitear)
 ```
 
 ---
