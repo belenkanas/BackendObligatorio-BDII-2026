@@ -1,18 +1,38 @@
-Trabajo Obligatorio 2026
 ## 🛠 Instalación y Ejecución
 
-### Construcción y levantamiento del proyecto con Docker
-
-Desde la raiz del repositorio, ejecutar:
-```
+### 1. Levantar la base de datos
+Desde la raíz del repositorio:
+```bash
 docker-compose up -d
 ```
-Esto levanta el contenedor **MySQL**
 
-### Establecer conexión del modelo en DataGrip
-Teniendo en cuenta los datos envueltos en `.env`, completar los campos siguiendo la imagen:
+### 2. Ejecutar el schema
+Ejecutar el archivo `schema.sql` desde la consola de DataGrip.
 
-(esto igual lo modificamos cuando esté bien definido)
+### 3. Levantar el backend
+```bash
+cd backend
+mvn spring-boot:run
+```
 
-### ⚠️ IMPORTANTE: Es necesario cargar la base de datos
-#### Esta parte es manual. Para realizarlo se debe ejecutar el archivo `schema.sql` desde la consola de DataGrip con conexión al entorno del obligatorio.
+### 4. Cargar datos de prueba
+Con el backend corriendo, ejecutar:
+```bash
+curl -X POST http://localhost:8080/auth/registro \
+  -H "Content-Type: application/json" \
+  -d '{
+    "mail": "test@test.com",
+    "password": "1234",
+    "documentoTipo": "CI",
+    "documentoNumeroDoc": "22222222",
+    "direccionCalle": "Av. Italia",
+    "direccionNumero": "100",
+    "direccionCodigoPostal": "11600",
+    "direccionPais": "Uruguay",
+    "direccionLocalidad": "Montevideo"
+  }'
+```
+
+Credenciales de prueba:
+- **Mail:** test@test.com
+- **Contraseña:** 1234
