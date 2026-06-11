@@ -31,4 +31,12 @@ public class TransfEntradaService {
     public void eliminar(TransfEntradaId id) {
         transfEntradaRepository.deleteById(id);
     }
+
+    public List<TransfEntrada> obtenerPendientesPorReceptor(Integer idGeneral) {
+        return transfEntradaRepository.findByIdGeneralRecibeAndEstado(idGeneral, "pendiente");
+    }
+
+    public List<TransfEntrada> obtenerHistorialPorUsuario(Integer idGeneral) {
+        return transfEntradaRepository.findByIdGeneralRealizaOrIdGeneralRecibe(idGeneral, idGeneral);
+    }
 }

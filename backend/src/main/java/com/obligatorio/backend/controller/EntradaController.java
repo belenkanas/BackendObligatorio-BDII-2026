@@ -43,4 +43,14 @@ public class EntradaController {
     public void eliminar(@PathVariable Integer id) {
         entradaService.eliminar(id);
     }
+
+    @GetMapping("/usuario/{idGeneral}")
+    public List<Entrada> obtenerPorUsuario(@PathVariable Integer idGeneral) {
+        return entradaService.obtenerPorPropietario(idGeneral);
+    }
+
+    @GetMapping("/venta/{idVenta}")
+    public List<Entrada> obtenerPorVenta(@PathVariable Integer idVenta) {
+        return entradaService.obtenerPorVenta(idVenta);
+    }
 }

@@ -48,6 +48,9 @@ public class Entrada {
     @Column(name = "id_venta")
     private Integer idVenta;
 
+    @Column(name = "cant_transferida")
+    private Integer cantTransferida = 0;
+
     // Getters y Setters
 
     public Integer getId() {
@@ -136,5 +139,13 @@ public class Entrada {
 
     public void setIdVenta(Integer idVenta) {
         this.idVenta = idVenta;
+    }
+
+    public Integer getCantTransferida() { 
+        return cantTransferida; 
+    }
+    
+    public void setCantTransferida(Integer cantTransferida) { 
+        this.cantTransferida = cantTransferida; 
     }
 }

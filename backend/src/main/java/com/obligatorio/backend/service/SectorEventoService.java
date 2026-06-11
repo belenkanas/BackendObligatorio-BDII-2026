@@ -1,5 +1,6 @@
 package com.obligatorio.backend.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,5 +31,9 @@ public class SectorEventoService {
 
     public void eliminar(SectorEventoId id) {
         sectorEventoRepository.deleteById(id);
+    }
+
+    public List<SectorEvento> obtenerPorEvento(String estadio, String pais, String ciudad, LocalDateTime fecha) {
+        return sectorEventoRepository.findByEvento(estadio, pais, ciudad, fecha);
     }
 }

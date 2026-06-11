@@ -30,4 +30,12 @@ public class EntradaService {
     public void eliminar(Integer id) {
         entradaRepository.deleteById(id);
     }
+
+    public List<Entrada> obtenerPorPropietario(Integer idGeneral) {
+        return entradaRepository.findByIdGeneralPropietario(idGeneral);
+    }
+
+    public List<Entrada> obtenerPorVenta(Integer idVenta) {
+        return entradaRepository.findByIdVenta(idVenta);
+    }
 }
