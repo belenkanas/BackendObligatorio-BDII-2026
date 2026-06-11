@@ -6,201 +6,201 @@ USE obligatorio;
 -- TABLAS PRINCIPALES  
 -- =========================================  
   
-CREATE TABLE Usuario (  
+CREATE TABLE usuario (  
     mail VARCHAR(100) PRIMARY KEY,
     password VARCHAR(255) NOT NULL,  
     documento_tipo VARCHAR(20),  
-    documento_numeroDoc VARCHAR(30),  
+    documento_numero_doc VARCHAR(30),  
     direccion_calle VARCHAR(100),  
     direccion_numero VARCHAR(10),  
-    direccion_codigoPostal VARCHAR(20),  
+    direccion_codigo_postal VARCHAR(20),  
     direccion_pais VARCHAR(50),  
     direccion_localidad VARCHAR(50)  
 );  
   
-CREATE TABLE Perfil (  
+CREATE TABLE perfil (  
     id INT AUTO_INCREMENT PRIMARY KEY,  
-    mailUsuario VARCHAR(100),
-    FOREIGN KEY (mailUsuario) REFERENCES Usuario(mail)  
+    mail_usuario VARCHAR(100),
+    FOREIGN KEY (mail_usuario) REFERENCES usuario(mail)  
 );  
   
-CREATE TABLE Administrador (  
+CREATE TABLE administrador (  
     id_administrador INT PRIMARY KEY,  
     fecha_asignado DATE,  
-    paisSede VARCHAR(50),  
-    FOREIGN KEY (id_administrador) REFERENCES Perfil(id)  
+    pais_sede VARCHAR(50),  
+    FOREIGN KEY (id_administrador) REFERENCES perfil(id)  
 );  
   
-CREATE TABLE Funcionario (  
+CREATE TABLE funcionario (  
     id_funcionario INT PRIMARY KEY,  
-    nroLegajo VARCHAR(20) UNIQUE,  
-    FOREIGN KEY (id_funcionario) REFERENCES Perfil(id)  
+    nro_legajo VARCHAR(20) UNIQUE,  
+    FOREIGN KEY (id_funcionario) REFERENCES perfil(id)  
 );  
   
-CREATE TABLE General (  
+CREATE TABLE general (  
     id_general INT PRIMARY KEY,  
     estado_verificacion_id VARCHAR(50),  
     fecha_registro DATE,  
-    FOREIGN KEY (id_general) REFERENCES Perfil(id)  
+    FOREIGN KEY (id_general) REFERENCES perfil(id)  
 );  
   
-CREATE TABLE DispositivoEscaneo (  
+CREATE TABLE dispositivo_escaneo (  
     id INT AUTO_INCREMENT PRIMARY KEY,  
-    nrolegajo VARCHAR(20)  
+    nro_legajo VARCHAR(20)  
 );  
   
-CREATE TABLE Equipo (  
-    nombrePais VARCHAR(50) PRIMARY KEY  
+CREATE TABLE equipo (  
+    nombre_pais VARCHAR(50) PRIMARY KEY  
 );  
   
-CREATE TABLE Partido (  
+CREATE TABLE partido (  
     fecha_hora TIMESTAMP PRIMARY KEY  
 );  
   
-CREATE TABLE Estadio (  
+CREATE TABLE estadio (  
     nombre VARCHAR(100),  
     direccion_pais VARCHAR(50),  
     direccion_ciudad VARCHAR(50),  
     PRIMARY KEY (nombre, direccion_pais, direccion_ciudad)  
 );  
   
-CREATE TABLE Evento (  
-    estadioNombre VARCHAR(100),  
-    estadioDireccionPais VARCHAR(50),  
-    estadioDireccionCiudad VARCHAR(50),  
+CREATE TABLE evento (  
+    estadio_nombre VARCHAR(100),  
+    estadio_direccion_pais VARCHAR(50),  
+    estadio_direccion_ciudad VARCHAR(50),  
     fecha_hora_partido TIMESTAMP,  
-    nombrePais_equipoLocal VARCHAR(50),  
-    nombrePais_equipoVisitante VARCHAR(50),  
+    nombre_pais_equipo_local VARCHAR(50),  
+    nombre_pais_equipo_visitante VARCHAR(50),  
   
     PRIMARY KEY (  
-        estadioNombre,  
-        estadioDireccionPais,  
-        estadioDireccionCiudad,  
+        estadio_nombre,  
+        estadio_direccion_pais,  
+        estadio_direccion_ciudad,  
         fecha_hora_partido,  
-        nombrePais_equipoLocal,  
-        nombrePais_equipoVisitante  
+        nombre_pais_equipo_local,  
+        nombre_pais_equipo_visitante  
     ),  
   
-    FOREIGN KEY (estadioNombre, estadioDireccionPais, estadioDireccionCiudad)  
-        REFERENCES Estadio(nombre, direccion_pais, direccion_ciudad),  
+    FOREIGN KEY (estadio_nombre, estadio_direccion_pais, estadio_direccion_ciudad)  
+        REFERENCES estadio(nombre, direccion_pais, direccion_ciudad),  
   
     FOREIGN KEY (fecha_hora_partido)  
-        REFERENCES Partido(fecha_hora),  
+        REFERENCES partido(fecha_hora),  
   
-    FOREIGN KEY (nombrePais_equipoLocal)  
-        REFERENCES Equipo(nombrePais),  
+    FOREIGN KEY (nombre_pais_equipo_local)  
+        REFERENCES equipo(nombre_pais),  
   
-    FOREIGN KEY (nombrePais_equipoVisitante)  
-        REFERENCES Equipo(nombrePais)  
+    FOREIGN KEY (nombre_pais_equipo_visitante)  
+        REFERENCES equipo(nombre_pais)  
 );  
   
-CREATE TABLE Sector (  
+CREATE TABLE sector (  
     nombre VARCHAR(50),  
-    estadioNombre VARCHAR(100),  
-    estadioDireccionPais VARCHAR(50),  
-    estadioDireccionCiudad VARCHAR(50),  
-    capacidadMax INT,  
+    estadio_nombre VARCHAR(100),  
+    estadio_direccion_pais VARCHAR(50),  
+    estadio_direccion_ciudad VARCHAR(50),  
+    capacidad_max INT,  
   
     PRIMARY KEY (  
         nombre,  
-        estadioNombre,  
-        estadioDireccionPais,  
-        estadioDireccionCiudad  
+        estadio_nombre,  
+        estadio_direccion_pais,  
+        estadio_direccion_ciudad  
     ),  
   
-    FOREIGN KEY (estadioNombre, estadioDireccionPais, estadioDireccionCiudad)  
-        REFERENCES Estadio(nombre, direccion_pais, direccion_ciudad)  
+    FOREIGN KEY (estadio_nombre, estadio_direccion_pais, estadio_direccion_ciudad)  
+        REFERENCES estadio(nombre, direccion_pais, direccion_ciudad)  
 );  
   
-CREATE TABLE SectorEvento (  
+CREATE TABLE sector_evento (  
     nombre_sector VARCHAR(50),  
-    estadioNombre VARCHAR(100),  
-    estadioDireccionPais VARCHAR(50),  
-    estadioDireccionCiudad VARCHAR(50),  
+    estadio_nombre VARCHAR(100),  
+    estadio_direccion_pais VARCHAR(50),  
+    estadio_direccion_ciudad VARCHAR(50),  
     fecha_hora_partido TIMESTAMP,  
     costo DECIMAL(10,2),  
   
     PRIMARY KEY (  
         nombre_sector,  
-        estadioNombre,  
-        estadioDireccionPais,  
-        estadioDireccionCiudad,  
+        estadio_nombre,  
+        estadio_direccion_pais,  
+        estadio_direccion_ciudad,  
         fecha_hora_partido  
     ),  
   
     FOREIGN KEY (  
         nombre_sector,  
-        estadioNombre,  
-        estadioDireccionPais,  
-        estadioDireccionCiudad  
+        estadio_nombre,  
+        estadio_direccion_pais,  
+        estadio_direccion_ciudad  
     )  
-        REFERENCES Sector(  
+        REFERENCES sector(  
             nombre,  
-            estadioNombre,  
-            estadioDireccionPais,  
-            estadioDireccionCiudad  
+            estadio_nombre,  
+            estadio_direccion_pais,  
+            estadio_direccion_ciudad  
         ),  
   
     FOREIGN KEY (fecha_hora_partido)  
-        REFERENCES Partido(fecha_hora)  
+        REFERENCES partido(fecha_hora)  
 );  
   
-CREATE TABLE Venta (  
+CREATE TABLE venta (  
     id_venta INT AUTO_INCREMENT PRIMARY KEY,  
     fecha_hora TIMESTAMP,  
     comision DECIMAL(10,2),  
-    costoFinal DECIMAL(10,2),  
+    costo_final DECIMAL(10,2),  
     estado VARCHAR(30),  
     id_general INT,  
   
     FOREIGN KEY (id_general)  
-        REFERENCES General(id_general)  
+        REFERENCES general(id_general)  
 );  
   
-CREATE TABLE Entrada (  
+CREATE TABLE entrada (  
     id INT AUTO_INCREMENT PRIMARY KEY,  
     estado VARCHAR(30),  
   
     nombre_sector VARCHAR(50),  
-    estadioNombre VARCHAR(100),  
-    estadioDireccionPais VARCHAR(50),  
-    estadioDireccionCiudad VARCHAR(50),  
+    estadio_nombre VARCHAR(100),  
+    estadio_direccion_pais VARCHAR(50),  
+    estadio_direccion_ciudad VARCHAR(50),  
     fecha_hora_partido TIMESTAMP,  
   
-    nombrePais_equipoLocal VARCHAR(50),  
-    nombrePais_equipoVisitante VARCHAR(50),  
+    nombre_pais_equipo_local VARCHAR(50),  
+    nombre_pais_equipo_visitante VARCHAR(50),  
   
     id_general_propietario INT,  
     id_venta INT,  
   
     FOREIGN KEY (  
         nombre_sector,  
-        estadioNombre,  
-        estadioDireccionPais,  
-        estadioDireccionCiudad,  
+        estadio_nombre,  
+        estadio_direccion_pais,  
+        estadio_direccion_ciudad,  
         fecha_hora_partido  
     )  
-        REFERENCES SectorEvento(  
+        REFERENCES sector_evento(  
             nombre_sector,  
-            estadioNombre,  
-            estadioDireccionPais,  
-            estadioDireccionCiudad,  
+            estadio_nombre,  
+            estadio_direccion_pais,  
+            estadio_direccion_ciudad,  
             fecha_hora_partido  
         ),  
   
     FOREIGN KEY (id_general_propietario)  
-        REFERENCES General(id_general),  
+        REFERENCES general(id_general),  
   
     FOREIGN KEY (id_venta)  
-        REFERENCES Venta(id_venta)  
+        REFERENCES venta(id_venta)  
 );  
   
-CREATE TABLE Token (  
+CREATE TABLE token (  
     qr VARCHAR(255) PRIMARY KEY,  
     valido BOOLEAN  
 );  
   
-CREATE TABLE TransfEntrada (  
+CREATE TABLE transf_entrada (  
     fecha_hora TIMESTAMP,  
     estado VARCHAR(30),  
     id_entrada INT,  
@@ -210,81 +210,81 @@ CREATE TABLE TransfEntrada (
     PRIMARY KEY (fecha_hora, id_entrada),  
   
     FOREIGN KEY (id_entrada)  
-        REFERENCES Entrada(id),  
+        REFERENCES entrada(id),  
   
     FOREIGN KEY (id_general_realiza)  
-        REFERENCES General(id_general),  
+        REFERENCES general(id_general),  
   
     FOREIGN KEY (id_general_recibe)  
-        REFERENCES General(id_general)  
+        REFERENCES general(id_general)  
 );  
   
-CREATE TABLE Validacion (  
-    nroLegajo_funcionario VARCHAR(20),  
-    id_dispositivoEscaneo INT,  
+CREATE TABLE validacion (  
+    nro_legajo_funcionario VARCHAR(20),  
+    id_dispositivo_escaneo INT,  
   
-    PRIMARY KEY (nroLegajo_funcionario, id_dispositivoEscaneo),  
+    PRIMARY KEY (nro_legajo_funcionario, id_dispositivo_escaneo),  
   
-    FOREIGN KEY (id_dispositivoEscaneo)  
-        REFERENCES DispositivoEscaneo(id)  
+    FOREIGN KEY (id_dispositivo_escaneo)  
+        REFERENCES dispositivo_escaneo(id)  
 );  
   
 -- =========================================  
 -- TABLAS INTERMEDIAS  
 -- =========================================  
   
-CREATE TABLE Telefonos_Usuario (  
+CREATE TABLE telefonos_usuario (  
     mail_usuario VARCHAR(100),  
     telefono VARCHAR(20),  
   
     PRIMARY KEY (mail_usuario, telefono),  
   
     FOREIGN KEY (mail_usuario)  
-        REFERENCES Usuario(mail)  
+        REFERENCES usuario(mail)  
 );  
   
-CREATE TABLE Administrador_gestiona_Evento (  
+CREATE TABLE administrador_gestiona_evento (  
     id_administrador INT,  
   
-    estadioNombre VARCHAR(100),  
-    estadioDireccionPais VARCHAR(50),  
-    estadioDireccionCiudad VARCHAR(50),  
+    estadio_nombre VARCHAR(100),  
+    estadio_direccion_pais VARCHAR(50),  
+    estadio_direccion_ciudad VARCHAR(50),  
     fecha_hora_partido TIMESTAMP,  
-    nombrePais_equipoLocal VARCHAR(50),  
-    nombrePais_equipoVisitante VARCHAR(50),  
+    nombre_pais_equipo_local VARCHAR(50),  
+    nombre_pais_equipo_visitante VARCHAR(50),  
   
     PRIMARY KEY (  
         id_administrador,  
-        estadioNombre,  
-        estadioDireccionPais,  
-        estadioDireccionCiudad,  
+        estadio_nombre,  
+        estadio_direccion_pais,  
+        estadio_direccion_ciudad,  
         fecha_hora_partido,  
-        nombrePais_equipoLocal,  
-        nombrePais_equipoVisitante  
+        nombre_pais_equipo_local,  
+        nombre_pais_equipo_visitante  
     ),  
   
     FOREIGN KEY (id_administrador)  
-        REFERENCES Administrador(id_administrador),  
+        REFERENCES administrador(id_administrador),  
   
     FOREIGN KEY (  
-        estadioNombre,  
-        estadioDireccionPais,  
-        estadioDireccionCiudad,  
+        estadio_nombre,  
+        estadio_direccion_pais,  
+        estadio_direccion_ciudad,  
         fecha_hora_partido,  
-        nombrePais_equipoLocal,  
-        nombrePais_equipoVisitante  
+        nombre_pais_equipo_local,  
+        nombre_pais_equipo_visitante  
     )  
-        REFERENCES Evento(  
-            estadioNombre,  
-            estadioDireccionPais,  
-            estadioDireccionCiudad,  
+        REFERENCES evento(  
+            estadio_nombre,  
+            estadio_direccion_pais,  
+            estadio_direccion_ciudad,  
             fecha_hora_partido,  
-            nombrePais_equipoLocal,  
-            nombrePais_equipoVisitante  
+            nombre_pais_equipo_local,  
+            nombre_pais_equipo_visitante  
         )  
 );  
   
-CREATE TABLE Entrada_tiene_Token (  
+CREATE TABLE entrada_tiene_token (  
     qr VARCHAR(255),  
     id_entrada INT,  
     fecha_caducidad TIMESTAMP,  
@@ -292,50 +292,50 @@ CREATE TABLE Entrada_tiene_Token (
     PRIMARY KEY (qr, id_entrada),  
   
     FOREIGN KEY (qr)  
-        REFERENCES Token(qr),  
+        REFERENCES token(qr),  
   
     FOREIGN KEY (id_entrada)  
-        REFERENCES Entrada(id)  
+        REFERENCES entrada(id)  
 );  
   
-CREATE TABLE Funcionario_asignadoA_Sector (  
-    nroLegajo VARCHAR(20),  
+CREATE TABLE funcionario_asignado_a_sector (  
+    nro_legajo VARCHAR(20),  
     nombre_sector VARCHAR(50),  
-    estadioNombre VARCHAR(100),  
-    estadioDireccionPais VARCHAR(50),  
-    estadioDireccionCiudad VARCHAR(50),  
+    estadio_nombre VARCHAR(100),  
+    estadio_direccion_pais VARCHAR(50),  
+    estadio_direccion_ciudad VARCHAR(50),  
   
     PRIMARY KEY (  
-        nroLegajo,  
+        nro_legajo,  
         nombre_sector,  
-        estadioNombre,  
-        estadioDireccionPais,  
-        estadioDireccionCiudad  
+        estadio_nombre,  
+        estadio_direccion_pais,  
+        estadio_direccion_ciudad  
     )  
 );  
   
-CREATE TABLE Token_escaneado_Valido (  
-    nroLegajo_funcionario VARCHAR(20),  
-    id_dispositivoEscaneo INT,  
+CREATE TABLE token_escaneado_valido (  
+    nro_legajo_funcionario VARCHAR(20),  
+    id_dispositivo_escaneo INT,  
     fecha_validacion TIMESTAMP,  
     qr_token VARCHAR(255),  
   
     PRIMARY KEY (  
-        nroLegajo_funcionario,  
-        id_dispositivoEscaneo,  
+        nro_legajo_funcionario,  
+        id_dispositivo_escaneo,  
         fecha_validacion,  
         qr_token  
     ),  
   
     FOREIGN KEY (qr_token)  
-        REFERENCES Token(qr),  
+        REFERENCES token(qr),  
   
     FOREIGN KEY (  
-        nroLegajo_funcionario,  
-        id_dispositivoEscaneo  
+        nro_legajo_funcionario,  
+        id_dispositivo_escaneo  
     )  
-        REFERENCES Validacion(  
-            nroLegajo_funcionario,  
-            id_dispositivoEscaneo  
+        REFERENCES validacion(  
+            nro_legajo_funcionario,  
+            id_dispositivo_escaneo  
         )  
-);  
+);
