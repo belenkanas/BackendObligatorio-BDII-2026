@@ -25,4 +25,6 @@ public interface EntradaRepository extends JpaRepository<Entrada, Integer> {
     List<Entrada> findByIdGeneralPropietario(Integer idGeneralPropietario);
 
     List<Entrada> findByIdVenta(Integer idVenta);
+
+    List<Entrada> findByEstado(String estado);
 }

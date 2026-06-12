@@ -14,4 +14,6 @@ public interface TransfEntradaRepository extends JpaRepository<TransfEntrada, Tr
     List<TransfEntrada> findByIdGeneralRecibeAndEstado(Integer idGeneralRecibe, String estado);
     
     List<TransfEntrada> findByIdGeneralRealizaOrIdGeneralRecibe(Integer idGeneralRealiza, Integer idGeneralRecibe);
+
+    List<TransfEntrada> findByEstado(String estado);
 }
