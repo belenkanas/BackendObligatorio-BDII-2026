@@ -171,7 +171,7 @@ public class TransfEntradaController {
             nuevaEntrada.setNombrePaisEquipoLocal(entrada.getNombrePaisEquipoLocal());
             nuevaEntrada.setNombrePaisEquipoVisitante(entrada.getNombrePaisEquipoVisitante());
             nuevaEntrada.setIdGeneralPropietario(transf.getIdGeneralRecibe());
-            nuevaEntrada.setIdVenta(entrada.getIdVenta());
+            nuevaEntrada.setIdVenta(null);
             entradaRepository.save(nuevaEntrada);
         } else {
             entrada.setEstado("activo");
@@ -193,5 +193,39 @@ public class TransfEntradaController {
     @GetMapping("/historial/{idGeneral}")
     public List<TransfEntrada> obtenerHistorial(@PathVariable Integer idGeneral) {
         return transfEntradaService.obtenerHistorialPorUsuario(idGeneral);
+    }
+
+    @Transactional
+    @PostMapping("/cancelar")
+    public ResponseEntity<?> cancelarTransferencia(@RequestBody Map<String, Object> datos) {
+
+        Integer idEntrada = (Integer) datos.get("idEntrada");
+        String fechaHoraStr = (String) datos.get("fechaHora");
+
+        TransfEntradaId transfId = new TransfEntradaId();
+        transfId.setIdEntrada(idEntrada);
+        transfId.setFechaHora(LocalDateTime.parse(fechaHoraStr));
+
+        Optional<TransfEntrada> transfOpt = transfEntradaService.obtenerPorId(transfId);
+        if (transfOpt.isEmpty()) {
+            return ResponseEntity.badRequest().body("Transferencia no encontrada");
+        }
+
+        TransfEntrada transf = transfOpt.get();
+
+        if (!transf.getEstado().equals("pendiente")) {
+            return ResponseEntity.badRequest().body("Solo se pueden cancelar transferencias pendientes");
+        }
+
+        // volver la entrada a estado activo
+        Entrada entrada = entradaRepository.findById(idEntrada).get();
+        entrada.setEstado("activo");
+        entradaRepository.save(entrada);
+
+        // marcar transferencia como cancelada
+        transf.setEstado("cancelado");
+        transfEntradaService.crear(transf);
+
+        return ResponseEntity.ok("Transferencia cancelada correctamente");
     }
 }
