@@ -7,10 +7,8 @@ Sistema integral de ticketing para partidos del Mundial 2026. Permite la compra,
 ## Requisitos previos
 
 - [Docker](https://www.docker.com/) y Docker Compose
-- Java 17 o superior
+- Java 21 o superior
 - Maven 3.9+ (o usar el wrapper `./mvnw` incluido)
-- Node.js 18+
-- [Expo CLI](https://docs.expo.dev/get-started/installation/): `npm install -g expo-cli`
 
 ---
 
@@ -35,7 +33,7 @@ Desde la raíz del repositorio:
 docker-compose up -d
 ```
 
-Esto levanta MySQL en el puerto **3307**. Podés verificar que esté listo con:
+Esto levanta MySQL en el puerto **3307** y crea el esquema automáticamente. Podes verificar que esté listo con:
 
 ```bash
 docker logs obligatorio2026_db
@@ -43,31 +41,20 @@ docker logs obligatorio2026_db
 
 ---
 
-## 3. Crear el esquema
-
-Con la base de datos corriendo, ejecutar el script SQL:
-
-```bash
-# Opción A: desde línea de comandos
-mysql -h 127.0.0.1 -P 3307 -u admin -padmin123 < sql/schema.sql
-
-# Opción B: desde DataGrip u otro cliente SQL
-# Conectarse a localhost:3307, usuario: admin, contraseña: admin123
-# Ejecutar el archivo sql/schema.sql
-```
-
----
-
-## 4. Levantar el backend
+## 3. Levantar el backend
 
 ```bash
 cd backend
 ./mvnw spring-boot:run
 ```
 
+> En Windows usar `mvnw.cmd spring-boot:run`
+
 El servidor arranca en **http://localhost:8080**.
 
-> En Windows usar `mvnw.cmd spring-boot:run`
+Al iniciar, Hibernate crea/actualiza las tablas automáticamente y se insertan los datos iniciales (48 equipos del Mundial 2026 y 16 estadios sede) desde `src/main/resources/data/inserts.sql`.
+
+---
 
 ### Verificar que funciona
 
@@ -77,34 +64,40 @@ curl http://localhost:8080/eventos
 
 ---
 
-## 5. Cargar datos de prueba
+## 4. Frontend
 
-Con el backend corriendo, registrar un usuario de prueba:
+El frontend de la aplicación se encuentra en un repositorio separado:
+https://github.com/belenkanas/FrontendObligatorio-BDII-2026.git
 
-```bash
-curl -X POST http://localhost:8080/auth/registro \
-  -H "Content-Type: application/json" \
-  -d '{
-    "mail": "test@test.com",
-    "password": "1234",
-    "documentoTipo": "CI",
-    "documentoNumeroDoc": "22222222",
-    "direccionCalle": "Av. Italia",
-    "direccionNumero": "100",
-    "direccionCodigoPostal": "11600",
-    "direccionPais": "Uruguay",
-    "direccionLocalidad": "Montevideo"
-  }'
-```
+Para ejecutarlo y ver los primeros pasos, seguir las instrucciones del README correspondiente.
 
-**Credenciales de prueba:**
-- Mail: `test@test.com`
-- Contraseña: `1234`
-
-
+---
 
 ## Estructura del proyecto
 
+/
+├── backend/
+  ├── src/
+    ├── main/
+      ├──java/com/obligatorio/backend/
+        ├── config/
+        ├── controller/
+        ├── model/
+        ├── repository/
+        ├── scheduler/
+        ├── security/
+        ├── service/
+        ├── Main.java
+      ├──resources/
+        ├── data/
+        ├── application.properties
+├── mer/
+├── sql/
+├── .env  
+├── .gitignore 
+└── docker-compose.yml          
+
+---
 
 ## Tecnologías
 
@@ -114,8 +107,14 @@ curl -X POST http://localhost:8080/auth/registro \
 
 ---
 
+## Endpoints
+
+
+---
+
+
 ## Notas
 
 - El archivo `.env` está en `.gitignore` y **no debe commitearse**.
-- La base de datos corre en el puerto `3307` (no el 3306 estándar) para evitar conflictos con instancias locales de MySQL.
-- `spring.jpa.hibernate.ddl-auto=update` crea/actualiza las tablas automáticamente al iniciar el backend, por lo que el paso del schema es opcional si el usuario de la DB tiene permisos de DDL.
+- La base de datos corre en el puerto `3307` para evitar conflictos con instancias locales de MySQL.
+- Los datos iniciales se insertan automáticamente al levantar el backend usando `ON DUPLICATE KEY UPDATE`, por lo que pueden ejecutarse múltiples veces sin generar duplicados.
