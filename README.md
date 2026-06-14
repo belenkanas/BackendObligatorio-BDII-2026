@@ -1,6 +1,6 @@
 # Mundial 2026 — Sistema de Ticketing Digital
 
-Sistema integral de ticketing para partidos del Mundial 2026. Permite la compra, transferencia y validación de entradas con QR dinámico.
+Sistema integral de ticketing para partidos del Mundial 2026. Permite la compra y transferencia de entradas entre usuarios, y la validación de acceso a los eventos mediante códigos QR dinámicos que se regeneran cada 30 segundos para evitar fraudes. La plataforma contempla tres roles de usuario: General, Administrador y Funcionario, cada uno con funcionalidades específicas dentro del sistema.
 
 ---
 
@@ -75,6 +75,7 @@ Para ejecutarlo y ver los primeros pasos, seguir las instrucciones del README co
 
 ## Estructura del proyecto
 
+```
 /
 ├── backend/
   ├── src/
@@ -96,14 +97,18 @@ Para ejecutarlo y ver los primeros pasos, seguir las instrucciones del README co
 ├── .env  
 ├── .gitignore 
 └── docker-compose.yml          
+```
 
 ---
 
 ## Tecnologías
 
-- **Backend:** Java 21, Spring Boot 3.5, Spring Data JPA, Spring Security Crypto, MySQL
-- **Frontend:** React Native, Expo Router
-- **Base de datos:** MySQL 8.0 (Docker)
+| Capa | Tecnología |
+|------|-----------|
+| Backend | Java 21, Spring Boot 3.5, Spring Data JPA |
+| Base de datos | MySQL 8.0 (Docker) |
+| Seguridad | BCrypt (Spring Security Crypto) |
+| Frontend | React Native, Expo Router |
 
 ---
 
