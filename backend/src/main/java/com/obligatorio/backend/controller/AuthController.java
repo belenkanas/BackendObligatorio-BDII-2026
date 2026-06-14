@@ -17,11 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.obligatorio.backend.model.General;
 import com.obligatorio.backend.model.Perfil;
+import com.obligatorio.backend.model.TelefonosUsuario;
+import com.obligatorio.backend.model.TelefonosUsuarioId;
 import com.obligatorio.backend.model.Usuario;
 import com.obligatorio.backend.service.AdministradorService;
 import com.obligatorio.backend.service.FuncionarioService;
 import com.obligatorio.backend.service.GeneralService;
 import com.obligatorio.backend.service.PerfilService;
+import com.obligatorio.backend.service.TelefonosUsuarioService;
 import com.obligatorio.backend.service.UsuarioService;
 
 @RestController
@@ -47,6 +50,9 @@ public class AuthController {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
+    @Autowired
+    private TelefonosUsuarioService telefonoUsuarioService;
+
     @Transactional
     @PostMapping("/registro")
     public ResponseEntity<?> registro(@RequestBody Map<String, Object> datos) {
@@ -67,6 +73,18 @@ public class AuthController {
         usuario.setDireccionPais((String) datos.get("direccionPais"));
         usuario.setDireccionLocalidad((String) datos.get("direccionLocalidad"));
         usuarioService.crear(usuario);
+
+        List<String> telefonos = (List<String>) datos.get("telefonos");
+        if (telefonos != null && !telefonos.isEmpty()) {
+            for (String telefono : telefonos) {
+                TelefonosUsuario tel = new TelefonosUsuario();
+                TelefonosUsuarioId telId = new TelefonosUsuarioId();
+                telId.setMailUsuario(mail);
+                telId.setTelefono(telefono);
+                tel.setId(telId);
+                telefonoUsuarioService.crear(tel);
+            }
+        }
 
         Perfil perfil = new Perfil();
         perfil.setUsuario(usuario);

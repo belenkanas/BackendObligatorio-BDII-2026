@@ -159,7 +159,8 @@ CREATE TABLE venta (
   
 CREATE TABLE entrada (  
     id INT AUTO_INCREMENT PRIMARY KEY,  
-    estado VARCHAR(30),  
+    estado VARCHAR(30) DEFAULT 'activa',
+    cant_transferida INT DEFAULT 0,
   
     nombre_sector VARCHAR(50),  
     estadio_nombre VARCHAR(100),  
@@ -202,7 +203,7 @@ CREATE TABLE token (
   
 CREATE TABLE transf_entrada (  
     fecha_hora TIMESTAMP,  
-    estado VARCHAR(30),  
+    estado VARCHAR(30) NOT NULL DEFAULT 'pendiente',  
     id_entrada INT,  
     id_general_realiza INT,  
     id_general_recibe INT,  
