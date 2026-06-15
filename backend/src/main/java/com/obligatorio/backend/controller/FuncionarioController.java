@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.obligatorio.backend.model.Funcionario;
+import com.obligatorio.backend.model.FuncionarioAsignadoASector;
 import com.obligatorio.backend.service.FuncionarioService;
 
 @RestController
@@ -23,6 +24,9 @@ public class FuncionarioController {
 
     @Autowired
     private FuncionarioService funcionarioService;
+
+    @Autowired
+    private com.obligatorio.backend.service.FuncionarioAsignadoASectorService funcionarioAsignadoASectorService;
 
     @GetMapping
     public List<Funcionario> obtenerTodos() {
@@ -47,5 +51,17 @@ public class FuncionarioController {
     @DeleteMapping("/{id}")
     public void eliminar(@PathVariable Integer id) {
         funcionarioService.eliminar(id);
+    }
+
+    @GetMapping("/{id}/eventos")
+    public List<FuncionarioAsignadoASector> obtenerEventosAsignados(
+            @PathVariable Integer id) {
+
+        Funcionario funcionario = funcionarioService
+                .obtenerPorId(id)
+                .orElseThrow();
+
+        return funcionarioAsignadoASectorService
+                .obtenerPorLegajo(funcionario.getNroLegajo());
     }
 }
