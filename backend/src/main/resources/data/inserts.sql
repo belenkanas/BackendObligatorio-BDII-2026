@@ -125,8 +125,7 @@ INSERT INTO sector (nombre, estadio_nombre, estadio_direccion_pais, estadio_dire
 ('Tribuna Norte',  'Lumen Field',              'Estados Unidos', 'Seattle',         400),
 ('Tribuna Sur',    'Lumen Field',              'Estados Unidos', 'Seattle',         400),
 ('General',        'Lumen Field',              'Estados Unidos', 'Seattle',         800)
- 
-ON DUPLICATE KEY UPDATE capacidad_max=capacidad_max;
+ ON DUPLICATE KEY UPDATE capacidad_max=capacidad_max;
  
 -- PARTIDOS: se agregan los partidos con sus fechas y estadios correspondientes, siguiendo el calendario oficial del mundial 2026.
 -- Los horarios de los partidos siguen la zona horaria de cada estadio en donde se juega el partido.
@@ -205,13 +204,12 @@ INSERT INTO partido (fecha_hora) VALUES
 ('2026-06-28 20:00:00'), -- Portugal vs Uzbekistán
 ('2026-06-28 20:01:00'), -- Colombia vs Congo
 ('2026-06-28 20:02:00'), -- Ghana vs Inglaterra
-('2026-06-28 20:03:00'), -- Panamá vs Croacia
- 
-ON DUPLICATE KEY UPDATE fecha_hora=fecha_hora;
+('2026-06-28 20:03:00') -- Panamá vs Croacia
+ ON DUPLICATE KEY UPDATE fecha_hora=fecha_hora;
  
 
 -- EVENTOS
-¿
+
 INSERT INTO evento (
     estadio_nombre, estadio_direccion_pais, estadio_direccion_ciudad,
     fecha_hora_partido, nombre_pais_equipo_local, nombre_pais_equipo_visitante
@@ -291,8 +289,7 @@ INSERT INTO evento (
 ('Estadio Azteca',          'México',          'Ciudad de México', '2026-06-28 20:01:00', 'Colombia',        'Congo'),
 ('BMO Field',               'Canadá',          'Toronto',          '2026-06-28 20:02:00', 'Ghana',           'Inglaterra'),
 ('Hard Rock Stadium',       'Estados Unidos',  'Miami',            '2026-06-28 20:03:00', 'Panamá',          'Croacia')
- 
-ON DUPLICATE KEY UPDATE estadio_nombre=estadio_nombre;
+ON DUPLICATE KEY UPDATE fecha_hora_partido = VALUES(fecha_hora_partido);
  
 
 -- SECTOR_EVENTO
@@ -332,7 +329,8 @@ ON DUPLICATE KEY UPDATE mail=mail;
 INSERT INTO perfil (mail_usuario) VALUES
 ('admin.mexico@mundial2026.com'),
 ('admin.canada@mundial2026.com'),
-('admin.usa@mundial2026.com');
+('admin.usa@mundial2026.com')
+ON DUPLICATE KEY UPDATE mail_usuario = VALUES(mail_usuario);
  
 
 INSERT INTO administrador (id_administrador, fecha_asignado, pais_sede)
