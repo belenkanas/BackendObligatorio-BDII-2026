@@ -31,4 +31,8 @@ public class FuncionarioAsignadoASectorService {
     public void eliminar(FuncionarioAsignadoASectorId id) {
         funcionarioAsignadoASectorRepository.deleteById(id);
     }
+
+    public List<FuncionarioAsignadoASector> obtenerPorLegajo(String legajo) {
+        return funcionarioAsignadoASectorRepository.findByIdNroLegajo(legajo);
+}
 }
