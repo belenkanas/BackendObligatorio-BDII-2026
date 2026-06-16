@@ -27,7 +27,7 @@ CREATE TABLE perfil (
 CREATE TABLE administrador (  
     id_administrador INT PRIMARY KEY,  
     fecha_asignado DATE,  
-    pais_sede VARCHAR(50),  
+    pais_sede ENUM ('México', 'Estados Unidos', 'Canadá') NOT NULL,  
     FOREIGN KEY (id_administrador) REFERENCES perfil(id)  
 );  
   
