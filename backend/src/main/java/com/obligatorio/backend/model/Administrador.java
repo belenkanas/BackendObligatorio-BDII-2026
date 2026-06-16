@@ -11,7 +11,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "Administrador")
+@Table(name = "administrador")
 public class Administrador {
     
     @Id
@@ -26,7 +26,7 @@ public class Administrador {
     @Column(name = "fecha_asignado")
     private LocalDate fecha_asignado;
 
-    @Column(name = "paisSede")
+    @Column(name = "pais_sede")
     private String paisSede;
 
     // Getters y Setters

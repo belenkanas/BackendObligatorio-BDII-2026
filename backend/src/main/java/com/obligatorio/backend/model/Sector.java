@@ -7,14 +7,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "Sector")
+@Table(name = "sector")
 
 public class Sector {
 
     @EmbeddedId
     private SectorId id;
 
-    @Column(name = "capacidadMax", nullable = false)
+    @Column(name = "capacidad_max", nullable = false)
     private Integer capacidadMax;
 
     public Sector() {

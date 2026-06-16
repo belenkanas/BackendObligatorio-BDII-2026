@@ -9,7 +9,7 @@ import jakarta.persistence.Embeddable;
 @Embeddable
 public class FuncionarioAsignadoASectorId implements Serializable {
 
-    @Column(name = "nro_Legajo", length = 100)
+    @Column(name = "nro_legajo", length = 100)
     private String nroLegajo;
 
     @Column(name = "nombre_sector", length = 100)

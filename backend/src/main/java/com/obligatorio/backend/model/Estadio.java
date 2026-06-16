@@ -5,13 +5,15 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "Estadio")
+@Table(name = "estadio")
 public class Estadio {
 
     @EmbeddedId
     private EstadioId id;
 
-    // Getters y Setters
     public EstadioId getId() { return id; }
-    public void setId(EstadioId id) { this.id = id; }
+
+    public void setId(EstadioId id) { 
+        this.id = id; 
+    }
 }

@@ -10,7 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "Entrada")
+@Table(name = "entrada")
 public class Entrada {
 
     @Id
@@ -24,22 +24,22 @@ public class Entrada {
     @Column(name = "nombre_sector")
     private String nombreSector;
 
-    @Column(name = "estadioNombre")
+    @Column(name = "estadio_nombre")
     private String estadioNombre;
 
-    @Column(name = "estadioDireccionPais")
+    @Column(name = "estadio_direccion_pais")
     private String estadioDireccionPais;
 
-    @Column(name = "estadioDireccionCiudad")
+    @Column(name = "estadio_direccion_ciudad")
     private String estadioDireccionCiudad;
 
     @Column(name = "fecha_hora_partido")
     private LocalDateTime fechaHoraPartido;
 
-    @Column(name = "nombrePais_equipoLocal")
+    @Column(name = "nombre_pais_equipo_local")
     private String nombrePaisEquipoLocal;
 
-    @Column(name = "nombrePais_equipoVisitante")
+    @Column(name = "nombre_pais_equipo_visitante")
     private String nombrePaisEquipoVisitante;
 
     @Column(name = "id_general_propietario")

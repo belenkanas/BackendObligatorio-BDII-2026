@@ -5,7 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "Evento")
+@Table(name = "evento")
 public class Evento {
 
     @EmbeddedId
@@ -14,5 +14,7 @@ public class Evento {
     public Evento() {}
 
     public EventoId getId() { return id; }
-    public void setId(EventoId id) { this.id = id; }
+    public void setId(EventoId id) { 
+        this.id = id; 
+    }
 }

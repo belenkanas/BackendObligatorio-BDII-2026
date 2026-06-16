@@ -11,7 +11,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "General")
+@Table(name = "general")
 public class General {
     
     @Id
@@ -29,7 +29,6 @@ public class General {
     @Column(name = "fecha_registro")
     private LocalDate fecha_registro;
 
-    // Getters y Setters
     public Integer getId_general() { 
         return id_general; 
     }

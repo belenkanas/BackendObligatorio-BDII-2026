@@ -8,7 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "Entrada_tiene_Token")
+@Table(name = "entrada_tiene_token")
 public class EntradaTieneToken {
 
     @EmbeddedId

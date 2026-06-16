@@ -1,11 +1,11 @@
 package com.obligatorio.backend.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
-
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 
 @Embeddable
 public class TransfEntradaId implements Serializable {
