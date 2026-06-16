@@ -143,6 +143,7 @@ public class AuthController {
     //Endpoint temporal para crear un admin, se puede eliminar después de crear el primer admin
     @PostMapping("/crear-admin-temporal")
     public ResponseEntity<?> crearAdminTemporal() {
+        //Mail y contraseña pueden modificarse
         String mail = "admin.test@mundial2026.com";
 
         if (usuarioService.obtenerPorMail(mail).isPresent()) {
@@ -151,6 +152,7 @@ public class AuthController {
 
         Usuario usuario = new Usuario();
         usuario.setMail(mail);
+        //Contraseña se puede modifica, pero debe tener mas de 6 caracteres
         usuario.setPassword(passwordEncoder.encode("admin1234"));
         usuario.setDocumentoTipo("Pasaporte");
         usuario.setDocumentoNumeroDoc("ADM-TEST-001");
