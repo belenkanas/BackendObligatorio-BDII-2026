@@ -127,86 +127,87 @@ INSERT INTO sector (nombre, estadio_nombre, estadio_direccion_pais, estadio_dire
 ('General',        'Lumen Field',              'Estados Unidos', 'Seattle',         800)
  ON DUPLICATE KEY UPDATE capacidad_max=capacidad_max;
  
--- PARTIDOS: se agregan los partidos con sus fechas y estadios correspondientes, siguiendo el calendario oficial del mundial 2026.
--- Los horarios de los partidos siguen la zona horaria de cada estadio en donde se juega el partido.
+-- PARTIDOS: se agregan los partidos con sus fechas y horarios en zona horaria de Uruguay (UTC-3).
+-- Los horarios corresponden a los indicados en el calendario oficial del Mundial 2026.
+
 INSERT INTO partido (fecha_hora) VALUES
 -- Jornada 1
-('2026-06-11 20:00:00'), -- México vs Sudáfrica
-('2026-06-12 03:00:00'), -- Corea del Sur vs Chequia
-('2026-06-12 20:00:00'), -- Canadá vs Bosnia y Herzegovina
-('2026-06-13 02:00:00'), -- Estados Unidos vs Paraguay
-('2026-06-13 20:00:00'), -- Catar vs Suiza
-('2026-06-13 23:00:00'), -- Brasil vs Marruecos
-('2026-06-14 02:00:00'), -- Haití vs Escocia
-('2026-06-14 17:00:00'), -- Australia vs Turquía
-('2026-06-14 18:00:00'), -- Alemania vs Curazao
-('2026-06-14 21:00:00'), -- Países Bajos vs Japón
-('2026-06-15 00:00:00'), -- Costa de Marfil vs Ecuador
-('2026-06-15 03:00:00'), -- Suecia vs Túnez
-('2026-06-15 17:00:00'), -- España vs Cabo Verde
-('2026-06-15 20:00:00'), -- Bélgica vs Egipto
-('2026-06-15 23:00:00'), -- Arabia Saudí vs Uruguay
-('2026-06-16 02:00:00'), -- Irán vs Nueva Zelanda
-('2026-06-16 20:00:00'), -- Francia vs Senegal
-('2026-06-16 23:00:00'), -- Irak vs Noruega
-('2026-06-17 02:00:00'), -- Argentina vs Argelia
-('2026-06-17 05:00:00'), -- Austria vs Jordania
-('2026-06-17 18:00:00'), -- Portugal vs Congo
-('2026-06-17 21:00:00'), -- Inglaterra vs Croacia
-('2026-06-18 00:00:00'), -- Ghana vs Panamá
-('2026-06-18 03:00:00'), -- Uzbekistán vs Colombia
+('2026-06-11 16:00:00'), -- México vs Sudáfrica
+('2026-06-11 23:00:00'), -- Corea del Sur vs Chequia
+('2026-06-12 16:00:00'), -- Canadá vs Bosnia y Herzegovina
+('2026-06-12 22:00:00'), -- Estados Unidos vs Paraguay
+('2026-06-13 16:00:00'), -- Catar vs Suiza
+('2026-06-13 19:00:00'), -- Brasil vs Marruecos
+('2026-06-13 22:00:00'), -- Haití vs Escocia
+('2026-06-14 01:00:00'), -- Australia vs Turquía
+('2026-06-14 14:00:00'), -- Alemania vs Curazao
+('2026-06-14 17:00:00'), -- Países Bajos vs Japón
+('2026-06-14 20:00:00'), -- Costa de Marfil vs Ecuador
+('2026-06-14 23:00:00'), -- Suecia vs Túnez
+('2026-06-15 13:00:00'), -- España vs Cabo Verde
+('2026-06-15 16:00:00'), -- Bélgica vs Egipto
+('2026-06-15 19:00:00'), -- Arabia Saudí vs Uruguay
+('2026-06-15 22:00:00'), -- Irán vs Nueva Zelanda
+('2026-06-16 16:00:00'), -- Francia vs Senegal
+('2026-06-16 19:00:00'), -- Irak vs Noruega
+('2026-06-16 22:00:00'), -- Argentina vs Argelia
+('2026-06-17 01:00:00'), -- Austria vs Jordania
+('2026-06-17 14:00:00'), -- Portugal vs Congo
+('2026-06-17 17:00:00'), -- Inglaterra vs Croacia
+('2026-06-17 20:00:00'), -- Ghana vs Panamá
+('2026-06-17 23:00:00'), -- Uzbekistán vs Colombia
 -- Jornada 2
-('2026-06-18 17:00:00'), -- Chequia vs Sudáfrica
-('2026-06-18 20:00:00'), -- Suiza vs Bosnia y Herzegovina
-('2026-06-18 23:00:00'), -- Canadá vs Catar
-('2026-06-19 02:00:00'), -- México vs Corea del Sur
-('2026-06-19 20:00:00'), -- Estados Unidos vs Australia
-('2026-06-19 23:00:00'), -- Escocia vs Marruecos
-('2026-06-20 01:30:00'), -- Brasil vs Haití
-('2026-06-20 04:00:00'), -- Turquía vs Paraguay
-('2026-06-20 18:00:00'), -- Países Bajos vs Suecia
-('2026-06-20 21:00:00'), -- Alemania vs Costa de Marfil
-('2026-06-21 00:00:00'), -- Ecuador vs Curazao
-('2026-06-21 03:00:00'), -- Japón vs Túnez
-('2026-06-21 18:00:00'), -- Cabo Verde vs Saudi Arabia
-('2026-06-21 21:00:00'), -- Uruguay vs Irán
-('2026-06-22 00:00:00'), -- España vs Bélgica
-('2026-06-22 03:00:00'), -- Egipto vs Nueva Zelanda
-('2026-06-22 18:00:00'), -- Senegal vs Irak
-('2026-06-22 21:00:00'), -- Noruega vs Francia
-('2026-06-23 00:00:00'), -- Argelia vs Austria
-('2026-06-23 03:00:00'), -- Argentina vs Jordania
-('2026-06-23 18:00:00'), -- Congo vs Uzbekistán
-('2026-06-23 21:00:00'), -- Colombia vs Portugal
-('2026-06-24 00:00:00'), -- Croacia vs Ghana
-('2026-06-24 03:00:00'), -- Panamá vs Inglaterra
--- Jornada 3
-('2026-06-25 20:00:00'), -- México vs Chequia
-('2026-06-25 20:01:00'), -- Sudáfrica vs Corea del Sur  (mismo grupo, hora paralela — +1s para evitar PK duplicada)
-('2026-06-26 02:00:00'), -- Bosnia y Herzegovina vs Catar
-('2026-06-26 02:01:00'), -- Suiza vs Canadá
-('2026-06-26 20:00:00'), -- Paraguay vs Australia
-('2026-06-26 20:01:00'), -- Marruecos vs Haití
-('2026-06-26 23:00:00'), -- Estados Unidos vs Turquía
-('2026-06-26 23:01:00'), -- Escocia vs Brasil
-('2026-06-27 02:00:00'), -- Curazao vs Japón
-('2026-06-27 02:01:00'), -- Túnez vs Alemania
-('2026-06-27 02:02:00'), -- Ecuador vs Países Bajos
-('2026-06-27 02:03:00'), -- Costa de Marfil vs Suecia
-('2026-06-27 20:00:00'), -- Saudi Arabia vs Irán
-('2026-06-27 20:01:00'), -- Nueva Zelanda vs España
-('2026-06-27 20:02:00'), -- Egipto vs Uruguay
-('2026-06-27 20:03:00'), -- Bélgica vs Cabo Verde
-('2026-06-28 02:00:00'), -- Irak vs Francia
-('2026-06-28 02:01:00'), -- Noruega vs Senegal
-('2026-06-28 02:02:00'), -- Argentina vs Austria
-('2026-06-28 02:03:00'), -- Argelia vs Jordania
-('2026-06-28 20:00:00'), -- Portugal vs Uzbekistán
-('2026-06-28 20:01:00'), -- Colombia vs Congo
-('2026-06-28 20:02:00'), -- Ghana vs Inglaterra
-('2026-06-28 20:03:00') -- Panamá vs Croacia
- ON DUPLICATE KEY UPDATE fecha_hora=fecha_hora;
- 
+('2026-06-18 13:00:00'), -- Chequia vs Sudáfrica
+('2026-06-18 16:00:00'), -- Suiza vs Bosnia y Herzegovina
+('2026-06-18 19:00:00'), -- Canadá vs Catar
+('2026-06-18 22:00:00'), -- México vs Corea del Sur
+('2026-06-19 16:00:00'), -- Estados Unidos vs Australia
+('2026-06-19 19:00:00'), -- Escocia vs Marruecos
+('2026-06-19 21:30:00'), -- Brasil vs Haití
+('2026-06-20 00:00:00'), -- Turquía vs Paraguay
+('2026-06-20 14:00:00'), -- Países Bajos vs Suecia
+('2026-06-20 17:00:00'), -- Alemania vs Costa de Marfil
+('2026-06-20 21:00:00'), -- Ecuador vs Curazao
+('2026-06-21 01:00:00'), -- Japón vs Túnez
+('2026-06-21 13:00:00'), -- España vs Arabia Saudita
+('2026-06-21 16:00:00'), -- Bélgica vs Irán
+('2026-06-21 19:00:00'), -- Uruguay vs Cabo Verde
+('2026-06-21 22:00:00'), -- Nueva Zelanda vs Egipto
+('2026-06-22 14:00:00'), -- Argentina vs Austria
+('2026-06-22 18:00:00'), -- Francia vs Irak
+('2026-06-22 21:00:00'), -- Noruega vs Senegal
+('2026-06-23 00:00:00'), -- Jordania vs Argelia
+('2026-06-23 14:00:00'), -- Portugal vs Uzbekistán
+('2026-06-23 17:00:00'), -- Inglaterra vs Ghana
+('2026-06-23 20:00:00'), -- Panamá vs Croacia
+('2026-06-23 23:00:00'), -- Colombia vs RD Congo
+-- Jornada 3 (partidos paralelos)
+('2026-06-24 16:00:00'), -- Suiza vs Canadá
+('2026-06-24 16:00:00'), -- Bosnia y Herzegovina vs Catar
+('2026-06-24 19:00:00'), -- Marruecos vs Haití
+('2026-06-24 19:00:00'), -- Brasil vs Escocia
+('2026-06-24 22:00:00'), -- Sudáfrica vs Corea del Sur
+('2026-06-24 22:00:00'), -- República Checa vs México
+('2026-06-25 17:00:00'), -- Curazao vs Costa de Marfil
+('2026-06-25 17:00:00'), -- Ecuador vs Alemania
+('2026-06-25 20:00:00'), -- Japón vs Suecia
+('2026-06-25 20:00:00'), -- Túnez vs Países Bajos
+('2026-06-25 23:00:00'), -- Paraguay vs Australia
+('2026-06-25 23:00:00'), -- Turquía vs Estados Unidos
+('2026-06-26 16:00:00'), -- Noruega vs Francia
+('2026-06-26 16:00:00'), -- Senegal vs Irak
+('2026-06-26 21:00:00'), -- Cabo Verde vs Arabia Saudita
+('2026-06-26 21:00:00'), -- Uruguay vs España
+('2026-06-27 00:00:00'), -- Egipto vs Irán
+('2026-06-27 00:00:00'), -- Nueva Zelanda vs Bélgica
+('2026-06-27 18:00:00'), -- Croacia vs Ghana
+('2026-06-27 18:00:00'), -- Panamá vs Inglaterra
+('2026-06-27 20:30:00'), -- Colombia vs Portugal
+('2026-06-27 20:30:00'), -- RD Congo vs Uzbekistán
+('2026-06-27 23:00:00'), -- Argelia vs Austria
+('2026-06-27 23:00:00')  -- Jordania vs Argentina
+ON DUPLICATE KEY UPDATE fecha_hora = fecha_hora;
+
 
 -- EVENTOS
 
@@ -215,82 +216,81 @@ INSERT INTO evento (
     fecha_hora_partido, nombre_pais_equipo_local, nombre_pais_equipo_visitante
 ) VALUES
 -- Jornada 1
-('Estadio Azteca',          'México',          'Ciudad de México', '2026-06-11 20:00:00', 'México',          'Sudáfrica'),
-('Estadio Akron',           'México',          'Guadalajara',      '2026-06-12 03:00:00', 'Corea del Sur',   'Chequia'),
-('BMO Field',               'Canadá',          'Toronto',          '2026-06-12 20:00:00', 'Canadá',          'Bosnia y Herzegovina'),
-('SoFi Stadium',            'Estados Unidos',  'Los Ángeles',      '2026-06-13 02:00:00', 'Estados Unidos',  'Paraguay'),
-('Levis Stadium',           'Estados Unidos',  'San Francisco',    '2026-06-13 20:00:00', 'Catar',           'Suiza'),
-('MetLife Stadium',         'Estados Unidos',  'East Rutherford',  '2026-06-13 23:00:00', 'Brasil',          'Marruecos'),
-('Gillette Stadium',        'Estados Unidos',  'Foxborough',       '2026-06-14 02:00:00', 'Haití',           'Escocia'),
-('BC Place',                'Canadá',          'Vancouver',        '2026-06-14 17:00:00', 'Australia',       'Turquía'),
-('NRG Stadium',             'Estados Unidos',  'Houston',          '2026-06-14 18:00:00', 'Alemania',        'Curazao'),
-('AT&T Stadium',            'Estados Unidos',  'Arlington',        '2026-06-14 21:00:00', 'Países Bajos',    'Japón'),
-('Lincoln Financial Field', 'Estados Unidos',  'Filadelfia',       '2026-06-15 00:00:00', 'Costa de Marfil', 'Ecuador'),
-('Estadio BBVA',            'México',          'Monterrey',        '2026-06-15 03:00:00', 'Suecia',          'Túnez'),
-('Mercedes-Benz Stadium',   'Estados Unidos',  'Atlanta',          '2026-06-15 17:00:00', 'España',          'Cabo Verde'),
-('Lumen Field',             'Estados Unidos',  'Seattle',          '2026-06-15 20:00:00', 'Bélgica',         'Egipto'),
-('Hard Rock Stadium',       'Estados Unidos',  'Miami',            '2026-06-15 23:00:00', 'Arabia Saudí',    'Uruguay'),
-('SoFi Stadium',            'Estados Unidos',  'Los Ángeles',      '2026-06-16 02:00:00', 'Irán',            'Nueva Zelanda'),
-('MetLife Stadium',         'Estados Unidos',  'East Rutherford',  '2026-06-16 20:00:00', 'Francia',         'Senegal'),
-('Gillette Stadium',        'Estados Unidos',  'Foxborough',       '2026-06-16 23:00:00', 'Irak',            'Noruega'),
-('Arrowhead Stadium',       'Estados Unidos',  'Kansas City',      '2026-06-17 02:00:00', 'Argentina',       'Argelia'),
-('Levis Stadium',           'Estados Unidos',  'San Francisco',    '2026-06-17 05:00:00', 'Austria',         'Jordania'),
-('NRG Stadium',             'Estados Unidos',  'Houston',          '2026-06-17 18:00:00', 'Portugal',        'Congo'),
-('AT&T Stadium',            'Estados Unidos',  'Arlington',        '2026-06-17 21:00:00', 'Inglaterra',      'Croacia'),
-('BMO Field',               'Canadá',          'Toronto',          '2026-06-18 00:00:00', 'Ghana',           'Panamá'),
-('Estadio Azteca',          'México',          'Ciudad de México', '2026-06-18 03:00:00', 'Uzbekistán',      'Colombia'),
+('Estadio Azteca',          'México',         'Ciudad de México', '2026-06-11 16:00:00', 'México',          'Sudáfrica'),
+('Estadio Akron',           'México',         'Guadalajara',      '2026-06-11 23:00:00', 'Corea del Sur',   'Chequia'),
+('BMO Field',               'Canadá',         'Toronto',          '2026-06-12 16:00:00', 'Canadá',          'Bosnia y Herzegovina'),
+('SoFi Stadium',            'Estados Unidos', 'Los Ángeles',      '2026-06-12 22:00:00', 'Estados Unidos',  'Paraguay'),
+('Levis Stadium',           'Estados Unidos', 'San Francisco',    '2026-06-13 16:00:00', 'Catar',           'Suiza'),
+('MetLife Stadium',         'Estados Unidos', 'East Rutherford',  '2026-06-13 19:00:00', 'Brasil',          'Marruecos'),
+('Gillette Stadium',        'Estados Unidos', 'Foxborough',       '2026-06-13 22:00:00', 'Haití',           'Escocia'),
+('BC Place',                'Canadá',         'Vancouver',        '2026-06-14 01:00:00', 'Australia',       'Turquía'),
+('NRG Stadium',             'Estados Unidos', 'Houston',          '2026-06-14 14:00:00', 'Alemania',        'Curazao'),
+('AT&T Stadium',            'Estados Unidos', 'Arlington',        '2026-06-14 17:00:00', 'Países Bajos',    'Japón'),
+('Lincoln Financial Field', 'Estados Unidos', 'Filadelfia',       '2026-06-14 20:00:00', 'Costa de Marfil', 'Ecuador'),
+('Estadio BBVA',            'México',         'Monterrey',        '2026-06-14 23:00:00', 'Suecia',          'Túnez'),
+('Mercedes-Benz Stadium',   'Estados Unidos', 'Atlanta',          '2026-06-15 13:00:00', 'España',          'Cabo Verde'),
+('Lumen Field',             'Estados Unidos', 'Seattle',          '2026-06-15 16:00:00', 'Bélgica',         'Egipto'),
+('Hard Rock Stadium',       'Estados Unidos', 'Miami',            '2026-06-15 19:00:00', 'Arabia Saudí',    'Uruguay'),
+('SoFi Stadium',            'Estados Unidos', 'Los Ángeles',      '2026-06-15 22:00:00', 'Irán',            'Nueva Zelanda'),
+('MetLife Stadium',         'Estados Unidos', 'East Rutherford',  '2026-06-16 16:00:00', 'Francia',         'Senegal'),
+('Gillette Stadium',        'Estados Unidos', 'Foxborough',       '2026-06-16 19:00:00', 'Irak',            'Noruega'),
+('Arrowhead Stadium',       'Estados Unidos', 'Kansas City',      '2026-06-16 22:00:00', 'Argentina',       'Argelia'),
+('Levis Stadium',           'Estados Unidos', 'San Francisco',    '2026-06-17 01:00:00', 'Austria',         'Jordania'),
+('NRG Stadium',             'Estados Unidos', 'Houston',          '2026-06-17 14:00:00', 'Portugal',        'Congo'),
+('AT&T Stadium',            'Estados Unidos', 'Arlington',        '2026-06-17 17:00:00', 'Inglaterra',      'Croacia'),
+('BMO Field',               'Canadá',         'Toronto',          '2026-06-17 20:00:00', 'Ghana',           'Panamá'),
+('Estadio Azteca',          'México',         'Ciudad de México', '2026-06-17 23:00:00', 'Uzbekistán',      'Colombia'),
 -- Jornada 2
-('Mercedes-Benz Stadium',   'Estados Unidos',  'Atlanta',          '2026-06-18 17:00:00', 'Chequia',         'Sudáfrica'),
-('SoFi Stadium',            'Estados Unidos',  'Los Ángeles',      '2026-06-18 20:00:00', 'Suiza',           'Bosnia y Herzegovina'),
-('BC Place',                'Canadá',          'Vancouver',        '2026-06-18 23:00:00', 'Canadá',          'Catar'),
-('Estadio Akron',           'México',          'Guadalajara',      '2026-06-19 02:00:00', 'México',          'Corea del Sur'),
-('Lumen Field',             'Estados Unidos',  'Seattle',          '2026-06-19 20:00:00', 'Estados Unidos',  'Australia'),
-('Gillette Stadium',        'Estados Unidos',  'Foxborough',       '2026-06-19 23:00:00', 'Escocia',         'Marruecos'),
-('Lincoln Financial Field', 'Estados Unidos',  'Filadelfia',       '2026-06-20 01:30:00', 'Brasil',          'Haití'),
-('Levis Stadium',           'Estados Unidos',  'San Francisco',    '2026-06-20 04:00:00', 'Turquía',         'Paraguay'),
-('NRG Stadium',             'Estados Unidos',  'Houston',          '2026-06-20 18:00:00', 'Países Bajos',    'Suecia'),
-('BMO Field',               'Canadá',          'Toronto',          '2026-06-20 21:00:00', 'Alemania',        'Costa de Marfil'),
-('MetLife Stadium',         'Estados Unidos',  'East Rutherford',  '2026-06-21 00:00:00', 'Ecuador',         'Curazao'),
-('Estadio BBVA',            'México',          'Monterrey',        '2026-06-21 03:00:00', 'Japón',           'Túnez'),
-('Hard Rock Stadium',       'Estados Unidos',  'Miami',            '2026-06-21 18:00:00', 'Cabo Verde',      'Arabia Saudí'),
-('SoFi Stadium',            'Estados Unidos',  'Los Ángeles',      '2026-06-21 21:00:00', 'Uruguay',         'Irán'),
-('Mercedes-Benz Stadium',   'Estados Unidos',  'Atlanta',          '2026-06-22 00:00:00', 'España',          'Bélgica'),
-('Lumen Field',             'Estados Unidos',  'Seattle',          '2026-06-22 03:00:00', 'Egipto',          'Nueva Zelanda'),
-('MetLife Stadium',         'Estados Unidos',  'East Rutherford',  '2026-06-22 18:00:00', 'Senegal',         'Irak'),
-('Gillette Stadium',        'Estados Unidos',  'Foxborough',       '2026-06-22 21:00:00', 'Noruega',         'Francia'),
-('Levis Stadium',           'Estados Unidos',  'San Francisco',    '2026-06-23 00:00:00', 'Argelia',         'Austria'),
-('Arrowhead Stadium',       'Estados Unidos',  'Kansas City',      '2026-06-23 03:00:00', 'Argentina',       'Jordania'),
-('Estadio Azteca',          'México',          'Ciudad de México', '2026-06-23 18:00:00', 'Congo',           'Uzbekistán'),
-('NRG Stadium',             'Estados Unidos',  'Houston',          '2026-06-23 21:00:00', 'Colombia',        'Portugal'),
-('BMO Field',               'Canadá',          'Toronto',          '2026-06-24 00:00:00', 'Croacia',         'Ghana'),
-('AT&T Stadium',            'Estados Unidos',  'Arlington',        '2026-06-24 03:00:00', 'Panamá',          'Inglaterra'),
+('Mercedes-Benz Stadium',   'Estados Unidos', 'Atlanta',          '2026-06-18 13:00:00', 'Chequia',         'Sudáfrica'),
+('SoFi Stadium',            'Estados Unidos', 'Los Ángeles',      '2026-06-18 16:00:00', 'Suiza',           'Bosnia y Herzegovina'),
+('BC Place',                'Canadá',         'Vancouver',        '2026-06-18 19:00:00', 'Canadá',          'Catar'),
+('Estadio Akron',           'México',         'Guadalajara',      '2026-06-18 22:00:00', 'México',          'Corea del Sur'),
+('Lumen Field',             'Estados Unidos', 'Seattle',          '2026-06-19 16:00:00', 'Estados Unidos',  'Australia'),
+('Gillette Stadium',        'Estados Unidos', 'Foxborough',       '2026-06-19 19:00:00', 'Escocia',         'Marruecos'),
+('Lincoln Financial Field', 'Estados Unidos', 'Filadelfia',       '2026-06-19 21:30:00', 'Brasil',          'Haití'),
+('Levis Stadium',           'Estados Unidos', 'San Francisco',    '2026-06-20 00:00:00', 'Turquía',         'Paraguay'),
+('NRG Stadium',             'Estados Unidos', 'Houston',          '2026-06-20 14:00:00', 'Países Bajos',    'Suecia'),
+('BMO Field',               'Canadá',         'Toronto',          '2026-06-20 17:00:00', 'Alemania',        'Costa de Marfil'),
+('MetLife Stadium',         'Estados Unidos', 'East Rutherford',  '2026-06-20 21:00:00', 'Ecuador',         'Curazao'),
+('Estadio BBVA',            'México',         'Monterrey',        '2026-06-21 01:00:00', 'Japón',           'Túnez'),
+('Mercedes-Benz Stadium',   'Estados Unidos', 'Atlanta',          '2026-06-21 13:00:00', 'España',          'Arabia Saudita'),
+('Lumen Field',             'Estados Unidos', 'Seattle',          '2026-06-21 16:00:00', 'Bélgica',         'Irán'),
+('Hard Rock Stadium',       'Estados Unidos', 'Miami',            '2026-06-21 19:00:00', 'Uruguay',         'Cabo Verde'),
+('BC Place',                'Canadá',         'Vancouver',        '2026-06-21 22:00:00', 'Nueva Zelanda',   'Egipto'),
+('AT&T Stadium',            'Estados Unidos', 'Arlington',        '2026-06-22 14:00:00', 'Argentina',       'Austria'),
+('Lincoln Financial Field', 'Estados Unidos', 'Filadelfia',       '2026-06-22 18:00:00', 'Francia',         'Irak'),
+('MetLife Stadium',         'Estados Unidos', 'East Rutherford',  '2026-06-22 21:00:00', 'Noruega',         'Senegal'),
+('Levis Stadium',           'Estados Unidos', 'San Francisco',    '2026-06-23 00:00:00', 'Jordania',        'Argelia'),
+('NRG Stadium',             'Estados Unidos', 'Houston',          '2026-06-23 14:00:00', 'Portugal',        'Uzbekistán'),
+('Gillette Stadium',        'Estados Unidos', 'Foxborough',       '2026-06-23 17:00:00', 'Inglaterra',      'Ghana'),
+('BMO Field',               'Canadá',         'Toronto',          '2026-06-23 20:00:00', 'Panamá',          'Croacia'),
+('Estadio Azteca',          'México',         'Ciudad de México', '2026-06-23 23:00:00', 'Colombia',        'RD Congo'),
 -- Jornada 3 (partidos paralelos)
-('Estadio Azteca',          'México',          'Ciudad de México', '2026-06-25 20:00:00', 'México',          'Chequia'),
-('Estadio Akron',           'México',          'Guadalajara',      '2026-06-25 20:01:00', 'Sudáfrica',       'Corea del Sur'),
-('Levis Stadium',           'Estados Unidos',  'San Francisco',    '2026-06-26 02:00:00', 'Bosnia y Herzegovina', 'Catar'),
-('BC Place',                'Canadá',          'Vancouver',        '2026-06-26 02:01:00', 'Suiza',           'Canadá'),
-('Levis Stadium',           'Estados Unidos',  'San Francisco',    '2026-06-26 20:00:00', 'Paraguay',        'Australia'),
-('Gillette Stadium',        'Estados Unidos',  'Foxborough',       '2026-06-26 20:01:00', 'Marruecos',       'Haití'),
-('Lumen Field',             'Estados Unidos',  'Seattle',          '2026-06-26 23:00:00', 'Estados Unidos',  'Turquía'),
-('Lincoln Financial Field', 'Estados Unidos',  'Filadelfia',       '2026-06-26 23:01:00', 'Escocia',         'Brasil'),
-('Estadio BBVA',            'México',          'Monterrey',        '2026-06-27 02:00:00', 'Curazao',         'Japón'),
-('NRG Stadium',             'Estados Unidos',  'Houston',          '2026-06-27 02:01:00', 'Túnez',           'Alemania'),
-('MetLife Stadium',         'Estados Unidos',  'East Rutherford',  '2026-06-27 02:02:00', 'Ecuador',         'Países Bajos'),
-('BMO Field',               'Canadá',          'Toronto',          '2026-06-27 02:03:00', 'Costa de Marfil', 'Suecia'),
-('Hard Rock Stadium',       'Estados Unidos',  'Miami',            '2026-06-27 20:00:00', 'Arabia Saudí',    'Irán'),
-('Mercedes-Benz Stadium',   'Estados Unidos',  'Atlanta',          '2026-06-27 20:01:00', 'Nueva Zelanda',   'España'),
-('Lumen Field',             'Estados Unidos',  'Seattle',          '2026-06-27 20:02:00', 'Egipto',          'Uruguay'),
-('SoFi Stadium',            'Estados Unidos',  'Los Ángeles',      '2026-06-27 20:03:00', 'Bélgica',         'Cabo Verde'),
-('MetLife Stadium',         'Estados Unidos',  'East Rutherford',  '2026-06-28 02:00:00', 'Irak',            'Francia'),
-('Gillette Stadium',        'Estados Unidos',  'Foxborough',       '2026-06-28 02:01:00', 'Noruega',         'Senegal'),
-('Arrowhead Stadium',       'Estados Unidos',  'Kansas City',      '2026-06-28 02:02:00', 'Argentina',       'Austria'),
-('AT&T Stadium',            'Estados Unidos',  'Arlington',        '2026-06-28 02:03:00', 'Argelia',         'Jordania'),
-('NRG Stadium',             'Estados Unidos',  'Houston',          '2026-06-28 20:00:00', 'Portugal',        'Uzbekistán'),
-('Estadio Azteca',          'México',          'Ciudad de México', '2026-06-28 20:01:00', 'Colombia',        'Congo'),
-('BMO Field',               'Canadá',          'Toronto',          '2026-06-28 20:02:00', 'Ghana',           'Inglaterra'),
-('Hard Rock Stadium',       'Estados Unidos',  'Miami',            '2026-06-28 20:03:00', 'Panamá',          'Croacia')
+('BC Place',                'Canadá',         'Vancouver',        '2026-06-24 16:00:00', 'Suiza',           'Canadá'),
+('Lumen Field',             'Estados Unidos', 'Seattle',          '2026-06-24 16:00:00', 'Bosnia y Herzegovina', 'Catar'),
+('Hard Rock Stadium',       'Estados Unidos', 'Miami',            '2026-06-24 19:00:00', 'Brasil',          'Escocia'),
+('Mercedes-Benz Stadium',   'Estados Unidos', 'Atlanta',          '2026-06-24 19:00:00', 'Marruecos',       'Haití'),
+('Estadio Akron',           'México',         'Guadalajara',      '2026-06-24 22:00:00', 'Sudáfrica',       'Corea del Sur'),
+('Estadio Azteca',          'México',         'Ciudad de México', '2026-06-24 22:00:00', 'República Checa', 'México'),
+('Lincoln Financial Field', 'Estados Unidos', 'Filadelfia',       '2026-06-25 17:00:00', 'Curazao',         'Costa de Marfil'),
+('MetLife Stadium',         'Estados Unidos', 'East Rutherford',  '2026-06-25 17:00:00', 'Ecuador',         'Alemania'),
+('AT&T Stadium',            'Estados Unidos', 'Arlington',        '2026-06-25 20:00:00', 'Japón',           'Suecia'),
+('Arrowhead Stadium',       'Estados Unidos', 'Kansas City',      '2026-06-25 20:00:00', 'Túnez',           'Países Bajos'),
+('Levis Stadium',           'Estados Unidos', 'San Francisco',    '2026-06-25 23:00:00', 'Paraguay',        'Australia'),
+('SoFi Stadium',            'Estados Unidos', 'Los Ángeles',      '2026-06-25 23:00:00', 'Turquía',         'Estados Unidos'),
+('Gillette Stadium',        'Estados Unidos', 'Foxborough',       '2026-06-26 16:00:00', 'Noruega',         'Francia'),
+('BMO Field',               'Canadá',         'Toronto',          '2026-06-26 16:00:00', 'Senegal',         'Irak'),
+('NRG Stadium',             'Estados Unidos', 'Houston',          '2026-06-26 21:00:00', 'Cabo Verde',      'Arabia Saudita'),
+('Estadio Akron',           'México',         'Guadalajara',      '2026-06-26 21:00:00', 'Uruguay',         'España'),
+('Lumen Field',             'Estados Unidos', 'Seattle',          '2026-06-27 00:00:00', 'Egipto',          'Irán'),
+('BC Place',                'Canadá',         'Vancouver',        '2026-06-27 00:00:00', 'Nueva Zelanda',   'Bélgica'),
+('Lincoln Financial Field', 'Estados Unidos', 'Filadelfia',       '2026-06-27 18:00:00', 'Croacia',         'Ghana'),
+('MetLife Stadium',         'Estados Unidos', 'East Rutherford',  '2026-06-27 18:00:00', 'Panamá',          'Inglaterra'),
+('Hard Rock Stadium',       'Estados Unidos', 'Miami',            '2026-06-27 20:30:00', 'Colombia',        'Portugal'),
+('Mercedes-Benz Stadium',   'Estados Unidos', 'Atlanta',          '2026-06-27 20:30:00', 'RD Congo',        'Uzbekistán'),
+('Arrowhead Stadium',       'Estados Unidos', 'Kansas City',      '2026-06-27 23:00:00', 'Argelia',         'Austria'),
+('AT&T Stadium',            'Estados Unidos', 'Arlington',        '2026-06-27 23:00:00', 'Jordania',        'Argentina')
 ON DUPLICATE KEY UPDATE fecha_hora_partido = VALUES(fecha_hora_partido);
- 
 
 -- SECTOR_EVENTO
 -- Precios por categoría para cada partido
