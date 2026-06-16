@@ -314,33 +314,3 @@ JOIN sector s
    AND s.estadio_direccion_pais = e.estadio_direccion_pais
    AND s.estadio_direccion_ciudad = e.estadio_direccion_ciudad
 ON DUPLICATE KEY UPDATE costo = VALUES(costo);
- 
-
--- USUARIOS ADMINISTRADORES POR DEFECTO
--- Un admin por país sede: México, Canadá, Estados Unidos
--- Password: "admin1234" (esto es solo para pruebas, en producción se usan contraseñas seguras y mecanismos de autenticación adecuados)
- 
-INSERT INTO usuario (mail, password, documento_tipo, documento_numero_doc, direccion_pais) VALUES
-('admin.mexico@mundial2026.com',  'admin1234', 'Pasaporte', 'ADM-MX-001', 'México'),
-('admin.canada@mundial2026.com',  'admin1234', 'Pasaporte', 'ADM-CA-001', 'Canadá'),
-('admin.usa@mundial2026.com',     'admin1234', 'Pasaporte', 'ADM-US-001', 'Estados Unidos')
-ON DUPLICATE KEY UPDATE mail=mail;
- 
-INSERT INTO perfil (mail_usuario) VALUES
-('admin.mexico@mundial2026.com'),
-('admin.canada@mundial2026.com'),
-('admin.usa@mundial2026.com')
-ON DUPLICATE KEY UPDATE mail_usuario = VALUES(mail_usuario);
- 
-
-INSERT INTO administrador (id_administrador, fecha_asignado, pais_sede)
-SELECT p.id, CURDATE(), u.direccion_pais
-FROM perfil p
-JOIN usuario u ON u.mail = p.mail_usuario
-WHERE u.mail IN (
-    'admin.mexico@mundial2026.com',
-    'admin.canada@mundial2026.com',
-    'admin.usa@mundial2026.com'
-)
-ON DUPLICATE KEY UPDATE pais_sede = VALUES(pais_sede);
- 
