@@ -39,14 +39,20 @@ CREATE TABLE funcionario (
   
 CREATE TABLE general (  
     id_general INT PRIMARY KEY,  
-    estado_verificacion_id VARCHAR(50),  
+    estado_verificacion_id ENUM(
+        'pendiente',
+        'verificado',
+        'rechazado'
+    ) NOT NULL DEFAULT 'pendiente',  
     fecha_registro DATE,  
     FOREIGN KEY (id_general) REFERENCES perfil(id)  
 );  
   
 CREATE TABLE dispositivo_escaneo (  
     id INT AUTO_INCREMENT PRIMARY KEY,  
-    nro_legajo VARCHAR(20)  
+    nro_legajo VARCHAR(20),
+        
+    FOREIGN KEY (nro_legajo) REFERENCES funcionario(nro_legajo)
 );  
   
 CREATE TABLE equipo (  
@@ -160,11 +166,11 @@ CREATE TABLE venta (
 CREATE TABLE entrada (  
     id INT AUTO_INCREMENT PRIMARY KEY,  
     estado ENUM('activa', 
-                'en_transferencia', '
-                transferida', 
+                'en_transferencia', 
+                'transferida', 
                 'consumida', 
                 'no_consumida') 
-        NOT NULL DEFAULT 'activa'
+        NOT NULL DEFAULT 'activa',
     cant_transferida INT DEFAULT 0,
   
     nombre_sector VARCHAR(50),  
@@ -192,7 +198,13 @@ CREATE TABLE entrada (
             estadio_direccion_pais,  
             estadio_direccion_ciudad,  
             fecha_hora_partido  
-        ),  
+        ), 
+
+    FOREIGN KEY (nombre_pais_equipo_local)
+        REFERENCES equipo(nombre_pais),
+
+    FOREIGN KEY (nombre_pais_equipo_visitante)
+        REFERENCES equipo(nombre_pais), 
   
     FOREIGN KEY (id_general_propietario)  
         REFERENCES general(id_general),  
@@ -236,8 +248,10 @@ CREATE TABLE validacion (
   
     PRIMARY KEY (nro_legajo_funcionario, id_dispositivo_escaneo),  
   
+    FOREIGN KEY (nro_legajo_funcionario)  
+        REFERENCES funcionario(nro_legajo),
     FOREIGN KEY (id_dispositivo_escaneo)  
-        REFERENCES dispositivo_escaneo(id)  
+        REFERENCES dispositivo_escaneo(id)
 );  
   
 -- =========================================  

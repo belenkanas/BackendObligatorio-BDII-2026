@@ -29,7 +29,7 @@ public class EntradaScheduler {
         LocalDateTime ahora = LocalDateTime.now();
 
         // marcar como no_consumida las entradas activas de eventos pasados
-        List<Entrada> entradasActivas = entradaRepository.findByEstado("activo");
+        List<Entrada> entradasActivas = entradaRepository.findByEstado("activa");
         for (Entrada entrada : entradasActivas) {
             if (entrada.getFechaHoraPartido().isBefore(ahora)) {
                 entrada.setEstado("no_consumida");
@@ -42,7 +42,7 @@ public class EntradaScheduler {
         for (TransfEntrada transf : pendientes) {
             Entrada entrada = entradaRepository.findById(transf.getId().getIdEntrada()).orElse(null);
             if (entrada != null && entrada.getFechaHoraPartido().isBefore(ahora)) {
-                transf.setEstado("cancelado");
+                transf.setEstado("cancelada");
                 transfEntradaRepository.save(transf);
                 entrada.setEstado("no_consumida");
                 entradaRepository.save(entrada);

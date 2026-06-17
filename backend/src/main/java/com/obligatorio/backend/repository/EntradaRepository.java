@@ -13,7 +13,7 @@ import com.obligatorio.backend.model.Entrada;
 @Repository
 public interface EntradaRepository extends JpaRepository<Entrada, Integer> {
 
-    @Query("SELECT COUNT(e) FROM Entrada e WHERE e.nombreSector = :sector AND e.estadioNombre = :estadio AND e.estadioDireccionPais = :pais AND e.estadioDireccionCiudad = :ciudad AND e.fechaHoraPartido = :fecha AND e.estado IN ('activo', 'en_transferencia')")
+    @Query("SELECT COUNT(e) FROM Entrada e WHERE e.nombreSector = :sector AND e.estadioNombre = :estadio AND e.estadioDireccionPais = :pais AND e.estadioDireccionCiudad = :ciudad AND e.fechaHoraPartido = :fecha AND e.estado IN ('activa', 'en_transferencia')")
     long countBySectorEvento(
         @Param("sector") String sector,
         @Param("estadio") String estadio,

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.obligatorio.backend.model.Entrada;
+import com.obligatorio.backend.model.General;
 import com.obligatorio.backend.model.TransfEntrada;
 import com.obligatorio.backend.model.TransfEntradaId;
 import com.obligatorio.backend.repository.EntradaRepository;
@@ -91,13 +92,25 @@ public class TransfEntradaController {
             return ResponseEntity.badRequest().body("No sos el propietario de esta entrada");
         }
 
+        // verificar el estado de la identidad
+        Optional<General> generalOpt = generalRepository.findById(idGeneralRealiza);
+
+        if (generalOpt.isEmpty()) {
+            return ResponseEntity.badRequest().body("Usuario no encontrado");
+        }
+
+        if (!generalOpt.get().getEstado_verificacion_id().equals("verificado")) {
+            return ResponseEntity.badRequest()
+                .body("Debes tener la identidad verificada para transferir entradas");
+        }
+
         // maximo 3 transferencias por entrada
         if (entrada.getCantTransferida() >= 3) {
             return ResponseEntity.badRequest().body("Esta entrada ya alcanzó el límite de 3 transferencias");
         }
 
         // verificar que la entrada no está en un estado inválido
-        if (!entrada.getEstado().equals("activo")) {
+        if (!entrada.getEstado().equals("activa")) {
             return ResponseEntity.badRequest().body("La entrada no está disponible para transferir");
         }
 
@@ -153,15 +166,15 @@ public class TransfEntradaController {
 
         if (respuesta.equals("aceptar")) {
             // la entrada original queda como transferida
-            entrada.setEstado("transferido");
+            entrada.setEstado("transferida");
             entrada.setCantTransferida(entrada.getCantTransferida() + 1);
-            transf.setEstado("aceptado");
+            transf.setEstado("aceptada");
             entradaRepository.save(entrada);
             transfEntradaService.crear(transf); 
 
             // y se crea una nueva entrada para el destinatario con la misma cantidad de transferencias
             Entrada nuevaEntrada = new Entrada();
-            nuevaEntrada.setEstado("activo");
+            nuevaEntrada.setEstado("activa");
             nuevaEntrada.setCantTransferida(entrada.getCantTransferida());
             nuevaEntrada.setNombreSector(entrada.getNombreSector());
             nuevaEntrada.setEstadioNombre(entrada.getEstadioNombre());
@@ -174,8 +187,8 @@ public class TransfEntradaController {
             nuevaEntrada.setIdVenta(null);
             entradaRepository.save(nuevaEntrada);
         } else {
-            entrada.setEstado("activo");
-            transf.setEstado("rechazado");
+            entrada.setEstado("activa");
+            transf.setEstado("rechazada");
             entradaRepository.save(entrada);
             transfEntradaService.crear(transf);
         }
@@ -219,11 +232,11 @@ public class TransfEntradaController {
 
         // volver la entrada a estado activo
         Entrada entrada = entradaRepository.findById(idEntrada).get();
-        entrada.setEstado("activo");
+        entrada.setEstado("activa");
         entradaRepository.save(entrada);
 
         // marcar transferencia como cancelada
-        transf.setEstado("cancelado");
+        transf.setEstado("cancelada");
         transfEntradaService.crear(transf);
 
         return ResponseEntity.ok("Transferencia cancelada correctamente");
