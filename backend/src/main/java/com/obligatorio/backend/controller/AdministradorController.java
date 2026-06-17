@@ -132,12 +132,18 @@ public class AdministradorController {
     @PostMapping("/cambiar-rol")
     public ResponseEntity<?> cambiarRol(@RequestBody Map<String, Object> datos) {
 
-        Integer idPerfil = (Integer) datos.get("idPerfil");
-        String nuevoRol = (String) datos.get("rol");
+        Integer idPerfil = ((Number) datos.get("idPerfil")).intValue();;
+        String nuevoRol = ((String) datos.get("rol")).toUpperCase();
 
         Optional<Perfil> perfilOpt = perfilService.obtenerPorId(idPerfil);
         if (perfilOpt.isEmpty()) {
             return ResponseEntity.badRequest().body("Usuario no encontrado");
+        }
+
+        Perfil perfil = perfilOpt.get();
+
+        if (perfil.getUsuario() != null) {
+            perfil.getUsuario().getMail();
         }
 
         long entradasActivas = entradaRepository.countByIdGeneralPropietarioAndEstadoIn(
