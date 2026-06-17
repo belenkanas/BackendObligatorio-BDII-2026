@@ -72,6 +72,8 @@ public class AdministradorController {
         return administradorService.obtenerPorId(id);
     }
 
+    //Función para crear un nuevo administrador, la idea es que solamente un admin pueda crear a otro admin, desde el frontend
+    //El endpoint es POST /administradores, y recibe un JSON con los datos del nuevo admin (mail, password y paisSede)
     @Transactional
     @PostMapping
     public ResponseEntity<?> crear(@RequestBody CrearAdministradorRequest datos) {
@@ -177,6 +179,8 @@ public class AdministradorController {
         return ResponseEntity.ok("Rol cambiado correctamente");
     }
 
+    //Endpoint de prueba para crear un admin temporal, con mail, contraseña y sede fijo.
+    //El endpoint es POST /administradores/crear-admin-temporal, y no recibe ningún parámetro, simplemente crea un admin con los datos predefinidos.
     @Transactional
     @PostMapping("/crear-admin-temporal")
     public ResponseEntity<?> crearAdminTemporal() {
