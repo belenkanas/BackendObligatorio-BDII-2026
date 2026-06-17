@@ -313,16 +313,27 @@ CREATE TABLE funcionario_asignado_a_sector (
     nro_legajo VARCHAR(20),  
     nombre_sector VARCHAR(50),  
     estadio_nombre VARCHAR(100),  
+    fecha_hora_partido TIMESTAMP,
     estadio_direccion_pais VARCHAR(50),  
     estadio_direccion_ciudad VARCHAR(50),  
   
     PRIMARY KEY (  
         nro_legajo,  
         nombre_sector,  
-        estadio_nombre,  
+        estadio_nombre, 
+        fecha_hora_partido, 
         estadio_direccion_pais,  
         estadio_direccion_ciudad  
     )  
+
+    FOREIGN KEY (nro_legajo)  
+        REFERENCES funcionario(nro_legajo),
+    
+    FOREIGN KEY (nombre_sector, estadio_nombre, estadio_direccion_pais, estadio_direccion_ciudad)
+        REFERENCES sector(nombre, estadio_nombre, estadio_direccion_pais, estadio_direccion_ciudad)
+
+    FOREIGN KEY (fecha_hora_partido)  
+        REFERENCES partido(fecha_hora)
 );  
   
 CREATE TABLE token_escaneado_valido (  
