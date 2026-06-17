@@ -83,7 +83,7 @@ public class EntradaController {
         }
 
         Entrada entrada = entradaOpt.get();
-        if (!entrada.getEstado().equals("activo")) {
+        if (!entrada.getEstado().equals("activa")) {
             return ResponseEntity.badRequest().body("La entrada no está activa");
         }
 

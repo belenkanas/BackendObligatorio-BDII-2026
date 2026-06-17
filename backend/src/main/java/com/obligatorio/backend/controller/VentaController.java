@@ -142,7 +142,7 @@ public class VentaController {
 
         for (int i = 0; i < cantidad; i++) {
             Entrada entrada = new Entrada();
-            entrada.setEstado("activo");
+            entrada.setEstado("activa");
             entrada.setCantTransferida(0);
             entrada.setNombreSector(nombreSector);
             entrada.setEstadioNombre(estadioNombre);

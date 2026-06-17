@@ -13,4 +13,5 @@ public interface FuncionarioAsignadoASectorRepository
         extends JpaRepository<FuncionarioAsignadoASector, FuncionarioAsignadoASectorId> {
 
     List<FuncionarioAsignadoASector> findByIdNroLegajo(String nroLegajo);
+
 }

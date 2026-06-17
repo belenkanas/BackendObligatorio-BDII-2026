@@ -24,7 +24,7 @@ public class General {
     private Perfil perfil;
     
     @Column(name = "estado_verificacion_id")
-    private String estado_verificacion_id;
+    private String estadoVerificacionId;
 
     @Column(name = "fecha_registro")
     private LocalDate fecha_registro;
@@ -45,12 +45,12 @@ public class General {
         this.perfil = perfil; 
     }
 
-    public String getEstado_verificacion_id() { 
-        return estado_verificacion_id; 
+    public String getEstadoVerificacionId() { 
+        return estadoVerificacionId; 
     }
 
-    public void setEstado_verificacion_id(String estado_verificacion_id) { 
-        this.estado_verificacion_id = estado_verificacion_id; 
+    public void setEstadoVerificacionId(String estadoVerificacionId) { 
+        this.estadoVerificacionId = estadoVerificacionId; 
     }
 
     public LocalDate getFecha_registro() { 
