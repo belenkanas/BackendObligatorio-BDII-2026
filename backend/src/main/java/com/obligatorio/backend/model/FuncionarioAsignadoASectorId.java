@@ -39,4 +39,17 @@ public class FuncionarioAsignadoASectorId implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof FuncionarioAsignadoASectorId)) return false;
-        FuncionarioAsignadoASecto
+        FuncionarioAsignadoASectorId that = (FuncionarioAsignadoASectorId) o;
+        return Objects.equals(nroLegajo, that.nroLegajo)
+            && Objects.equals(nombreSector, that.nombreSector)
+            && Objects.equals(estadioNombre, that.estadioNombre)
+            && Objects.equals(estadioDireccionPais, that.estadioDireccionPais)
+            && Objects.equals(estadioDireccionCiudad, that.estadioDireccionCiudad)
+            && Objects.equals(fechaHoraPartido, that.fechaHoraPartido);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nroLegajo, nombreSector, estadioNombre, estadioDireccionPais, estadioDireccionCiudad, fechaHoraPartido);
+    }
+}
