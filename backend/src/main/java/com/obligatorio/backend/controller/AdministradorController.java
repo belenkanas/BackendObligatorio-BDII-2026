@@ -102,6 +102,13 @@ public class AdministradorController {
         Usuario usuario = new Usuario();
         usuario.setMail(mail);
         usuario.setPassword(passwordEncoder.encode(datos.getPassword()));
+        usuario.setDireccionPais(paisSede);
+        usuario.setDocumentoTipo("N/A");
+        usuario.setDocumentoNumeroDoc("N/A");
+        usuario.setDireccionCalle("N/A");
+        usuario.setDireccionNumero("N/A");
+        usuario.setDireccionCodigoPostal("N/A");
+        usuario.setDireccionLocalidad("N/A");
         usuarioService.crear(usuario);
 
         Perfil perfil = new Perfil();
