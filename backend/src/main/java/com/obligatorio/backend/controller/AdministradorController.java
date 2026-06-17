@@ -25,6 +25,7 @@ import com.obligatorio.backend.model.General;
 import com.obligatorio.backend.model.Perfil;
 import com.obligatorio.backend.model.Usuario;
 import com.obligatorio.backend.repository.EntradaRepository;
+import com.obligatorio.backend.repository.GeneralRepository;
 import com.obligatorio.backend.service.AdministradorService;
 import com.obligatorio.backend.service.FuncionarioService;
 import com.obligatorio.backend.service.GeneralService;
@@ -58,6 +59,9 @@ public class AdministradorController {
     @Autowired
     private EntradaRepository entradaRepository;
 
+    @Autowired
+    private GeneralRepository generalRepository;
+
     @GetMapping
     public List<Administrador> obtenerTodos() {
         return administradorService.obtenerTodos();
@@ -72,7 +76,7 @@ public class AdministradorController {
     @PostMapping
     public ResponseEntity<?> crear(@RequestBody CrearAdministradorRequest datos) {
         if (datos.getMail() == null || datos.getMail().isBlank()) {
-            return ResponseEntity.badRequest().body("El mail es obligatorio");
+            return ResponseEntity.badRequest().body("El correo electrónico es obligatorio");
         }
 
         if (datos.getPassword() == null || datos.getPassword().isBlank()) {
@@ -81,7 +85,7 @@ public class AdministradorController {
 
         String mail = datos.getMail().trim();
         if (usuarioService.obtenerPorMail(mail).isPresent()) {
-            return ResponseEntity.badRequest().body("El mail ya está registrado");
+            return ResponseEntity.badRequest().body("El correo electrónico ya está registrado");
         }
 
         Usuario usuario = new Usuario();
@@ -119,7 +123,7 @@ public class AdministradorController {
         }
 
         long entradasActivas = entradaRepository.countByIdGeneralPropietarioAndEstadoIn(
-            idPerfil, List.of("activo", "en_transferencia")
+            idPerfil, List.of("activa", "en_transferencia")
         );
         if (entradasActivas > 0) {
             return ResponseEntity.badRequest().body("El usuario tiene entradas activas o en transferencia, no se puede cambiar el rol");
@@ -152,7 +156,7 @@ public class AdministradorController {
             case "GENERAL" -> {
                 General general = new General();
                 general.setPerfil(perfilOpt.get());
-                general.setEstado_verificacion_id("pendiente");
+                general.setEstadoVerificacionId("pendiente");
                 general.setFecha_registro(LocalDate.now());
                 generalService.crear(general);
             }
@@ -172,5 +176,46 @@ public class AdministradorController {
         datos.setPassword("admin1234");
         datos.setPaisSede("México");
         return crear(datos);
+    }
+
+    @GetMapping("/verificaciones/pendientes")
+    public ResponseEntity<?> obtenerPendientes() {
+
+        List<General> pendientes = generalRepository.findByEstadoVerificacionId("pendiente");
+
+        return ResponseEntity.ok(pendientes);
+    }
+
+    @Transactional
+    @PostMapping("/verificaciones/responder")
+    public ResponseEntity<?> responderVerificacion(@RequestBody Map<String, Object> datos) {
+
+        Integer idGeneral = (Integer) datos.get("idGeneral");
+        String estado = (String) datos.get("estado");
+
+        if (!estado.equals("verificado") &&
+            !estado.equals("rechazado")) {
+
+            return ResponseEntity.badRequest().body("Estado inválido");
+        }
+
+        Optional<General> generalOpt = generalRepository.findById(idGeneral);
+
+        if (generalOpt.isEmpty()) {
+            return ResponseEntity.badRequest().body("Usuario no encontrado");
+        }
+
+        General general = generalOpt.get();
+
+        if (!general.getEstadoVerificacionId().equals("pendiente")) {
+            return ResponseEntity.badRequest().body("La solicitud ya fue procesada");
+        }
+
+        general.setEstadoVerificacionId(estado);
+        generalRepository.save(general);
+
+        return ResponseEntity.ok(
+            "Usuario " + estado + " correctamente"
+        );
     }
 }

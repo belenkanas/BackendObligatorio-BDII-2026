@@ -1,6 +1,7 @@
 package com.obligatorio.backend.controller;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -20,6 +21,7 @@ import com.obligatorio.backend.model.Perfil;
 import com.obligatorio.backend.model.TelefonosUsuario;
 import com.obligatorio.backend.model.TelefonosUsuarioId;
 import com.obligatorio.backend.model.Usuario;
+import com.obligatorio.backend.repository.GeneralRepository;
 import com.obligatorio.backend.service.AdministradorService;
 import com.obligatorio.backend.service.FuncionarioService;
 import com.obligatorio.backend.service.GeneralService;
@@ -52,6 +54,9 @@ public class AuthController {
 
     @Autowired
     private TelefonosUsuarioService telefonoUsuarioService;
+
+    @Autowired
+    private GeneralRepository generalRepository;
 
     @Transactional
     @PostMapping("/registro")
@@ -93,7 +98,7 @@ public class AuthController {
 
         General general = new General();
         general.setPerfil(perfil);
-        general.setEstado_verificacion_id("pendiente");
+        general.setEstadoVerificacionId("pendiente");
         general.setFecha_registro(LocalDate.now());
         generalService.crear(general);
 
@@ -131,11 +136,19 @@ public class AuthController {
             rol = "FUNCIONARIO";
         }
 
-        return ResponseEntity.ok(Map.of(
-            "mail", usuario.getMail(),
-            "idPerfil", idPerfil,
-            "rol", rol,
-            "mensaje", "Login exitoso"
-        ));
+        Map<String, Object> respuesta = new HashMap<>();
+            respuesta.put("mail", usuario.getMail());
+            respuesta.put("idPerfil", idPerfil);
+            respuesta.put("rol", rol);
+            respuesta.put("mensaje", "Login exitoso");
+
+            if (rol.equals("GENERAL")) {
+                General general = generalRepository.findById(idPerfil).orElse(null);
+                if (general != null) {
+                    respuesta.put("estadoVerificacionIdentidad", general.getEstadoVerificacionId());
+                }
+            }
+
+            return ResponseEntity.ok(respuesta);
     }
 }

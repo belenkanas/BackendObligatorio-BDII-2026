@@ -99,7 +99,7 @@ public class TransfEntradaController {
             return ResponseEntity.badRequest().body("Usuario no encontrado");
         }
 
-        if (!generalOpt.get().getEstado_verificacion_id().equals("verificado")) {
+        if (!generalOpt.get().getEstadoVerificacionId().equals("verificado")) {
             return ResponseEntity.badRequest()
                 .body("Debes tener la identidad verificada para transferir entradas");
         }
