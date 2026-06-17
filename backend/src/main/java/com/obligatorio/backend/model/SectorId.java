@@ -12,13 +12,13 @@ public class SectorId implements Serializable {
     @Column(name = "nombre", length = 50)
     private String nombre;
 
-    @Column(name = "estadioNombre", length = 50)
+    @Column(name = "estadio_nombre", length = 50)
     private String estadioNombre;
 
-    @Column(name = "estadioDireccionPais", length = 50)
+    @Column(name = "estadio_direccion_pais", length = 50)
     private String estadioDireccionPais;
 
-    @Column(name = "estadioDireccionCiudad", length = 50)
+    @Column(name = "estadio_direccion_ciudad", length = 50)
     private String estadioDireccionCiudad;
 
     public SectorId() {

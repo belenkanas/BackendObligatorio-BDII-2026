@@ -10,7 +10,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "Perfil")
+@Table(name = "perfil")
 public class Perfil {
     
     @Id
@@ -19,10 +19,9 @@ public class Perfil {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "mailUsuario")
+    @JoinColumn(name = "mail_usuario")
     private Usuario usuario;
 
-    // Getters y Setters
     public Integer getId() { 
         return id; 
     }

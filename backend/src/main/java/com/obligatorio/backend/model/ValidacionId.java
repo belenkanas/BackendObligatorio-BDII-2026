@@ -1,18 +1,18 @@
 package com.obligatorio.backend.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
-
 import java.io.Serializable;
 import java.util.Objects;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 
 @Embeddable
 public class ValidacionId implements Serializable {
 
-    @Column(name = "nroLegajo_funcionario")
+    @Column(name = "nro_legajo_funcionario")
     private String nroLegajoFuncionario;
 
-    @Column(name = "id_dispositivoEscaneo")
+    @Column(name = "id_dispositivo_escaneo")
     private Integer idDispositivoEscaneo;
 
     public ValidacionId() {

@@ -10,10 +10,10 @@ import jakarta.persistence.Embeddable;
 @Embeddable
 public class TokenEscaneadoValidoId implements Serializable {
 
-    @Column(name = "nroLegajo_funcionario")
+    @Column(name = "nro_legajo_funcionario")
     private String nroLegajoFuncionario;
 
-    @Column(name = "id_dispositivoEscaneo")
+    @Column(name = "id_dispositivo_escaneo")
     private Integer idDispositivoEscaneo;
 
     @Column(name = "fecha_validacion")
@@ -25,16 +25,24 @@ public class TokenEscaneadoValidoId implements Serializable {
     public TokenEscaneadoValidoId() {}
 
     public String getNroLegajoFuncionario() { return nroLegajoFuncionario; }
-    public void setNroLegajoFuncionario(String nroLegajoFuncionario) { this.nroLegajoFuncionario = nroLegajoFuncionario; }
+    public void setNroLegajoFuncionario(String nroLegajoFuncionario) { 
+        this.nroLegajoFuncionario = nroLegajoFuncionario; 
+    }
 
     public Integer getIdDispositivoEscaneo() { return idDispositivoEscaneo; }
-    public void setIdDispositivoEscaneo(Integer idDispositivoEscaneo) { this.idDispositivoEscaneo = idDispositivoEscaneo; }
+    public void setIdDispositivoEscaneo(Integer idDispositivoEscaneo) { 
+        this.idDispositivoEscaneo = idDispositivoEscaneo; 
+    }
 
     public LocalDateTime getFechaValidacion() { return fechaValidacion; }
-    public void setFechaValidacion(LocalDateTime fechaValidacion) { this.fechaValidacion = fechaValidacion; }
+    public void setFechaValidacion(LocalDateTime fechaValidacion) { 
+        this.fechaValidacion = fechaValidacion; 
+    }
 
     public String getQrToken() { return qrToken; }
-    public void setQrToken(String qrToken) { this.qrToken = qrToken; }
+    public void setQrToken(String qrToken) { 
+        this.qrToken = qrToken; 
+    }
 
     @Override
     public boolean equals(Object o) {

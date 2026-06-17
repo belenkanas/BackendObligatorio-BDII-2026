@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,15 +18,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.obligatorio.backend.dto.CrearAdministradorRequest;
 import com.obligatorio.backend.model.Administrador;
 import com.obligatorio.backend.model.Funcionario;
 import com.obligatorio.backend.model.General;
 import com.obligatorio.backend.model.Perfil;
+import com.obligatorio.backend.model.Usuario;
 import com.obligatorio.backend.repository.EntradaRepository;
 import com.obligatorio.backend.service.AdministradorService;
 import com.obligatorio.backend.service.FuncionarioService;
 import com.obligatorio.backend.service.GeneralService;
 import com.obligatorio.backend.service.PerfilService;
+import com.obligatorio.backend.service.UsuarioService;
 
 @RestController
 @RequestMapping("/administradores")
@@ -45,6 +49,13 @@ public class AdministradorController {
     private PerfilService perfilService;
 
     @Autowired
+    private UsuarioService usuarioService;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
+
+    @Autowired
     private EntradaRepository entradaRepository;
 
     @GetMapping
@@ -57,9 +68,37 @@ public class AdministradorController {
         return administradorService.obtenerPorId(id);
     }
 
+    @Transactional
     @PostMapping
-    public Administrador crear(@RequestBody Administrador administrador) {
-        return administradorService.crear(administrador);
+    public ResponseEntity<?> crear(@RequestBody CrearAdministradorRequest datos) {
+        if (datos.getMail() == null || datos.getMail().isBlank()) {
+            return ResponseEntity.badRequest().body("El mail es obligatorio");
+        }
+
+        if (datos.getPassword() == null || datos.getPassword().isBlank()) {
+            return ResponseEntity.badRequest().body("La contraseña es obligatoria");
+        }
+
+        String mail = datos.getMail().trim();
+        if (usuarioService.obtenerPorMail(mail).isPresent()) {
+            return ResponseEntity.badRequest().body("El mail ya está registrado");
+        }
+
+        Usuario usuario = new Usuario();
+        usuario.setMail(mail);
+        usuario.setPassword(passwordEncoder.encode(datos.getPassword()));
+        usuarioService.crear(usuario);
+
+        Perfil perfil = new Perfil();
+        perfil.setUsuario(usuario);
+        perfil = perfilService.crear(perfil);
+
+        Administrador administrador = new Administrador();
+        administrador.setPerfil(perfil);
+        administrador.setFecha_asignado(LocalDate.now());
+        administrador.setPaisSede(datos.getPaisSede());
+
+        return ResponseEntity.ok(administradorService.crear(administrador));
     }
 
     @DeleteMapping("/{id}")
@@ -123,5 +162,15 @@ public class AdministradorController {
         }
 
         return ResponseEntity.ok("Rol cambiado correctamente");
+    }
+
+    @Transactional
+    @PostMapping("/crear-admin-temporal")
+    public ResponseEntity<?> crearAdminTemporal() {
+        CrearAdministradorRequest datos = new CrearAdministradorRequest();
+        datos.setMail("admin.test@mundial2026.com");
+        datos.setPassword("admin1234");
+        datos.setPaisSede("México");
+        return crear(datos);
     }
 }

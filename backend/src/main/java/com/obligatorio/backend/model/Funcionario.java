@@ -9,7 +9,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "Funcionario")
+@Table(name = "funcionario")
 public class Funcionario {
     
     @Id
@@ -21,10 +21,9 @@ public class Funcionario {
     @JoinColumn(name = "id_funcionario")
     private Perfil perfil;
 
-    @Column(name = "nroLegajo", unique = true)
+    @Column(name = "nro_legajo", unique = true)
     private String nroLegajo;
 
-    // Getters y Setters
     public Integer getId_funcionario() { 
         return id_funcionario; 
     }
@@ -34,8 +33,12 @@ public class Funcionario {
     }
 
     public Perfil getPerfil() { return perfil; }
-    public void setPerfil(Perfil perfil) { this.perfil = perfil; }
+    public void setPerfil(Perfil perfil) { 
+        this.perfil = perfil; 
+    }
 
     public String getNroLegajo() { return nroLegajo; }
-    public void setNroLegajo(String nroLegajo) { this.nroLegajo = nroLegajo; }
+    public void setNroLegajo(String nroLegajo) { 
+        this.nroLegajo = nroLegajo; 
+    }
 }

@@ -6,14 +6,16 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "Equipo")
+@Table(name = "equipo")
 public class Equipo {
 
     @Id
-    @Column(name = "nombrePais")
+    @Column(name = "nombre_pais")
     private String nombrePais;
 
-    // Getters y Setters
     public String getNombrePais() { return nombrePais; }
-    public void setNombrePais(String nombrePais) { this.nombrePais = nombrePais; }
+    
+    public void setNombrePais(String nombrePais) { 
+        this.nombrePais = nombrePais; 
+    }
 }

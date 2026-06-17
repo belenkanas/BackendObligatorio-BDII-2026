@@ -6,7 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "TransfEntrada")
+@Table(name = "transf_entrada")
 public class TransfEntrada {
 
     @EmbeddedId

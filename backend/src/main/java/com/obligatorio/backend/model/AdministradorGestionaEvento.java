@@ -5,7 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "Administrador_gestiona_Evento")
+@Table(name = "administrador_gestiona_evento")
 public class AdministradorGestionaEvento {
 
     @EmbeddedId

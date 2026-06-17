@@ -15,15 +15,20 @@ public class EstadioId implements Serializable {
     public EstadioId() {
     }
 
-    // Getters y Setters
     public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
+    public void setNombre(String nombre) { 
+        this.nombre = nombre; 
+    }
 
     public String getDireccion_pais() { return direccion_pais; }
-    public void setDireccion_pais(String direccion_pais) { this.direccion_pais = direccion_pais; }
+    public void setDireccion_pais(String direccion_pais) { 
+        this.direccion_pais = direccion_pais; 
+    }
 
     public String getDireccion_ciudad() { return direccion_ciudad; }
-    public void setDireccion_ciudad(String direccion_ciudad) { this.direccion_ciudad = direccion_ciudad; }
+    public void setDireccion_ciudad(String direccion_ciudad) { 
+        this.direccion_ciudad = direccion_ciudad; 
+    }
 
     @Override
     public boolean equals(Object o) {

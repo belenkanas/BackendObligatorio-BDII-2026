@@ -74,9 +74,10 @@ public class AuthController {
         usuario.setDireccionLocalidad((String) datos.get("direccionLocalidad"));
         usuarioService.crear(usuario);
 
-        List<String> telefonos = (List<String>) datos.get("telefonos");
-        if (telefonos != null && !telefonos.isEmpty()) {
-            for (String telefono : telefonos) {
+        Object telefonosObj = datos.get("telefonos");
+        if (telefonosObj instanceof List<?> telefonos && !telefonos.isEmpty()) {
+            for (Object telefonoObj : telefonos) {
+                String telefono = String.valueOf(telefonoObj);
                 TelefonosUsuario tel = new TelefonosUsuario();
                 TelefonosUsuarioId telId = new TelefonosUsuarioId();
                 telId.setMailUsuario(mail);

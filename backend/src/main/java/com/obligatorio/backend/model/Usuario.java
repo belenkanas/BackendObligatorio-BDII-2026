@@ -6,7 +6,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "Usuario")
+@Table(name = "usuario")
 public class Usuario {
 
     @Id
@@ -19,7 +19,7 @@ public class Usuario {
     @Column(name = "documento_tipo")
     private String documentoTipo;
 
-    @Column(name = "documento_numeroDoc")
+    @Column(name = "documento_numero_doc")
     private String documentoNumeroDoc;
 
     @Column(name = "direccion_calle")
@@ -28,7 +28,7 @@ public class Usuario {
     @Column(name = "direccion_numero")
     private String direccionNumero;
 
-    @Column(name = "direccion_codigoPostal")
+    @Column(name = "direccion_codigo_postal")
     private String direccionCodigoPostal;
 
     @Column(name = "direccion_pais")
@@ -37,7 +37,6 @@ public class Usuario {
     @Column(name = "direccion_localidad")
     private String direccionLocalidad;
 
-    // Getters y Setters
     public String getMail() { 
         return mail; 
     }

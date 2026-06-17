@@ -27,7 +27,7 @@ CREATE TABLE perfil (
 CREATE TABLE administrador (  
     id_administrador INT PRIMARY KEY,  
     fecha_asignado DATE,  
-    pais_sede VARCHAR(50),  
+    pais_sede ENUM ('México', 'Estados Unidos', 'Canadá') NOT NULL,  
     FOREIGN KEY (id_administrador) REFERENCES perfil(id)  
 );  
   
@@ -150,7 +150,7 @@ CREATE TABLE venta (
     fecha_hora TIMESTAMP,  
     comision DECIMAL(10,2),  
     costo_final DECIMAL(10,2),  
-    estado VARCHAR(30),  
+    estado VARCHAR(30) NOT NULL DEFAULT 'confirmada',
     id_general INT,  
   
     FOREIGN KEY (id_general)  
@@ -159,7 +159,12 @@ CREATE TABLE venta (
   
 CREATE TABLE entrada (  
     id INT AUTO_INCREMENT PRIMARY KEY,  
-    estado VARCHAR(30) DEFAULT 'activa',
+    estado ENUM('activa', 
+                'en_transferencia', '
+                transferida', 
+                'consumida', 
+                'no_consumida') 
+        NOT NULL DEFAULT 'activa'
     cant_transferida INT DEFAULT 0,
   
     nombre_sector VARCHAR(50),  
@@ -203,7 +208,12 @@ CREATE TABLE token (
   
 CREATE TABLE transf_entrada (  
     fecha_hora TIMESTAMP,  
-    estado VARCHAR(30) NOT NULL DEFAULT 'pendiente',  
+    estado ENUM 
+        ('pendiente', 
+        'aceptada', 
+        'rechazada',
+        'cancelada')
+        NOT NULL DEFAULT 'pendiente',
     id_entrada INT,  
     id_general_realiza INT,  
     id_general_recibe INT,  

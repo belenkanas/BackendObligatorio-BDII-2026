@@ -13,7 +13,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "Venta")
+@Table(name = "venta")
 public class Venta {
 
     @Id
@@ -27,7 +27,7 @@ public class Venta {
     @Column(name = "comision")
     private BigDecimal comision;
 
-    @Column(name = "costoFinal")
+    @Column(name = "costo_final")
     private BigDecimal costoFinal;
 
     @Column(name = "estado")
