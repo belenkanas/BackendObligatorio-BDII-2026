@@ -79,6 +79,15 @@ public class AdministradorController {
             return ResponseEntity.badRequest().body("La contraseña es obligatoria");
         }
 
+        if (datos.getPaisSede() == null || datos.getPaisSede().isBlank()) {
+            return ResponseEntity.badRequest().body("El pais sede es obligatorio");
+        }
+
+        String paisSede = datos.getPaisSede().trim();
+        if (!paisSede.equals("México") && !paisSede.equals("Estados Unidos") && !paisSede.equals("Canadá")) {
+            return ResponseEntity.badRequest().body("El pais sede debe ser uno de: México, Estados Unidos o Canadá");
+        }
+
         String mail = datos.getMail().trim();
         if (usuarioService.obtenerPorMail(mail).isPresent()) {
             return ResponseEntity.badRequest().body("El mail ya está registrado");
@@ -96,7 +105,7 @@ public class AdministradorController {
         Administrador administrador = new Administrador();
         administrador.setPerfil(perfil);
         administrador.setFecha_asignado(LocalDate.now());
-        administrador.setPaisSede(datos.getPaisSede());
+        administrador.setPaisSede(paisSede);
 
         return ResponseEntity.ok(administradorService.crear(administrador));
     }
