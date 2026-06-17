@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.obligatorio.backend.model.Administrador;
 import com.obligatorio.backend.model.General;
 import com.obligatorio.backend.model.Perfil;
 import com.obligatorio.backend.model.TelefonosUsuario;
@@ -75,9 +74,10 @@ public class AuthController {
         usuario.setDireccionLocalidad((String) datos.get("direccionLocalidad"));
         usuarioService.crear(usuario);
 
-        List<String> telefonos = (List<String>) datos.get("telefonos");
-        if (telefonos != null && !telefonos.isEmpty()) {
-            for (String telefono : telefonos) {
+        Object telefonosObj = datos.get("telefonos");
+        if (telefonosObj instanceof List<?> telefonos && !telefonos.isEmpty()) {
+            for (Object telefonoObj : telefonos) {
+                String telefono = String.valueOf(telefonoObj);
                 TelefonosUsuario tel = new TelefonosUsuario();
                 TelefonosUsuarioId telId = new TelefonosUsuarioId();
                 telId.setMailUsuario(mail);
@@ -137,38 +137,5 @@ public class AuthController {
             "rol", rol,
             "mensaje", "Login exitoso"
         ));
-    }
-
-
-    //Endpoint temporal para crear un admin, se puede eliminar después de crear el primer admin
-    @PostMapping("/crear-admin-temporal")
-    public ResponseEntity<?> crearAdminTemporal() {
-        //Mail y contraseña pueden modificarse
-        String mail = "admin.test@mundial2026.com";
-
-        if (usuarioService.obtenerPorMail(mail).isPresent()) {
-            return ResponseEntity.ok("Ya existe");
-        }
-
-        Usuario usuario = new Usuario();
-        usuario.setMail(mail);
-        //Contraseña se puede modifica, pero debe tener mas de 6 caracteres
-        usuario.setPassword(passwordEncoder.encode("admin1234"));
-        usuario.setDocumentoTipo("Pasaporte");
-        usuario.setDocumentoNumeroDoc("ADM-TEST-001");
-        usuario.setDireccionPais("México");
-        usuarioService.crear(usuario);
-
-        Perfil perfil = new Perfil();
-        perfil.setUsuario(usuario);
-        perfil = perfilService.crear(perfil);
-
-        Administrador admin = new Administrador();
-        admin.setPerfil(perfil);              // MapsId toma el id del perfil automáticamente
-        admin.setFecha_asignado(LocalDate.now());
-        admin.setPaisSede("México");
-        administradorService.crear(admin);
-
-        return ResponseEntity.ok("Admin creado — mail: " + mail + " / pass: admin1234");
     }
 }
