@@ -309,32 +309,52 @@ CREATE TABLE entrada_tiene_token (
         REFERENCES entrada(id)  
 );  
   
-CREATE TABLE funcionario_asignado_a_sector (  
-    nro_legajo VARCHAR(20),  
-    nombre_sector VARCHAR(50),  
-    estadio_nombre VARCHAR(100),  
+-- =========================================
+-- TABLA funcionario_asignado_a_sector ACTUALIZADA
+-- =========================================
+
+CREATE TABLE funcionario_asignado_a_sector (
+    nro_legajo VARCHAR(20),
+    nombre_sector VARCHAR(50),
+    estadio_nombre VARCHAR(100),
+    estadio_direccion_pais VARCHAR(50),
+    estadio_direccion_ciudad VARCHAR(50),
     fecha_hora_partido TIMESTAMP,
-    estadio_direccion_pais VARCHAR(50),  
-    estadio_direccion_ciudad VARCHAR(50),  
-  
-    PRIMARY KEY (  
-        nro_legajo,  
-        nombre_sector,  
-        estadio_nombre, 
-        fecha_hora_partido, 
-        estadio_direccion_pais,  
-        estadio_direccion_ciudad  
-    )  
+    id_dispositivo_escaneo INT NOT NULL,
 
-    FOREIGN KEY (nro_legajo)  
+    PRIMARY KEY (
+        nro_legajo,
+        nombre_sector,
+        estadio_nombre,
+        estadio_direccion_pais,
+        estadio_direccion_ciudad,
+        fecha_hora_partido
+    ),
+
+    FOREIGN KEY (nro_legajo)
         REFERENCES funcionario(nro_legajo),
-    
-    FOREIGN KEY (nombre_sector, estadio_nombre, estadio_direccion_pais, estadio_direccion_ciudad)
-        REFERENCES sector(nombre, estadio_nombre, estadio_direccion_pais, estadio_direccion_ciudad)
 
-    FOREIGN KEY (fecha_hora_partido)  
-        REFERENCES partido(fecha_hora)
-);  
+    FOREIGN KEY (
+        nombre_sector,
+        estadio_nombre,
+        estadio_direccion_pais,
+        estadio_direccion_ciudad,
+        fecha_hora_partido
+    )
+        REFERENCES sector_evento(
+            nombre_sector,
+            estadio_nombre,
+            estadio_direccion_pais,
+            estadio_direccion_ciudad,
+            fecha_hora_partido
+        ),
+
+    FOREIGN KEY (id_dispositivo_escaneo)
+        REFERENCES dispositivo_escaneo(id),
+
+    -- Un dispositivo no puede estar en dos sectores del mismo partido a la vez
+    UNIQUE KEY uq_dispositivo_partido (id_dispositivo_escaneo, fecha_hora_partido)
+); 
   
 CREATE TABLE token_escaneado_valido (  
     nro_legajo_funcionario VARCHAR(20),  
