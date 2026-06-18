@@ -12,78 +12,67 @@ import jakarta.persistence.Embeddable;
 public class AdministradorGestionaEventoId implements Serializable {
 
     @Column(name = "id_administrador")
-    private Integer id_administrador;
+    private Integer idAdministrador;
 
     @Column(name = "estadio_nombre", length = 100)
-    private String estadio_nombre;
+    private String estadioNombre;
 
     @Column(name = "estadio_direccion_pais", length = 50)
-    private String estadio_direccion_pais;
+    private String estadioDireccionPais;
 
     @Column(name = "estadio_direccion_ciudad", length = 50)
-    private String estadio_direccion_ciudad;
+    private String estadioDireccionCiudad;
 
     @Column(name = "fecha_hora_partido")
-    private LocalDateTime fecha_hora_partido;
+    private LocalDateTime fechaHoraPartido;
 
     @Column(name = "nombre_pais_equipo_local", length = 50)
-    private String nombre_pais_equipo_local;
+    private String nombrePaisEquipoLocal;
 
     @Column(name = "nombre_pais_equipo_visitante", length = 50)
-    private String nombre_pais_equipo_visitante;
+    private String nombrePaisEquipoVisitante;
 
     public AdministradorGestionaEventoId() {}
 
-    public Integer getIdAdministrador() { return id_administrador; }
-    public void setIdAdministrador(Integer id_administrador) { 
-        this.id_administrador = id_administrador; 
-    }
+    public Integer getIdAdministrador() { return idAdministrador; }
+    public void setIdAdministrador(Integer idAdministrador) { this.idAdministrador = idAdministrador; }
 
-    public String getEstadioNombre() { return estadio_nombre; }
-    public void setEstadioNombre(String estadio_nombre) { 
-        this.estadio_nombre = estadio_nombre; 
-    }
+    public String getEstadioNombre() { return estadioNombre; }
+    public void setEstadioNombre(String estadioNombre) { this.estadioNombre = estadioNombre; }
 
-    public String getEstadioDireccionPais() { return estadio_direccion_pais; }
-    public void setEstadioDireccionPais(String estadio_direccion_pais) { 
-        this.estadio_direccion_pais = estadio_direccion_pais; 
-    }
+    public String getEstadioDireccionPais() { return estadioDireccionPais; }
+    public void setEstadioDireccionPais(String estadioDireccionPais) { this.estadioDireccionPais = estadioDireccionPais; }
 
-    public String getEstadioDireccionCiudad() { return estadio_direccion_ciudad; }
-    public void setEstadioDireccionCiudad(String estadio_direccion_ciudad) { 
-        this.estadio_direccion_ciudad = estadio_direccion_ciudad; 
-    }
+    public String getEstadioDireccionCiudad() { return estadioDireccionCiudad; }
+    public void setEstadioDireccionCiudad(String estadioDireccionCiudad) { this.estadioDireccionCiudad = estadioDireccionCiudad; }
 
-    public LocalDateTime getFechaHoraPartido() { return fecha_hora_partido; }
-    public void setFechaHoraPartido(LocalDateTime fecha_hora_partido) { 
-        this.fecha_hora_partido = fecha_hora_partido; }
+    public LocalDateTime getFechaHoraPartido() { return fechaHoraPartido; }
+    public void setFechaHoraPartido(LocalDateTime fechaHoraPartido) { this.fechaHoraPartido = fechaHoraPartido; }
 
-    public String getNombrePaisEquipoLocal() { return nombre_pais_equipo_local; }
-    public void setNombrePaisEquipoLocal(String nombre_pais_equipo_local) { this.nombre_pais_equipo_local = nombre_pais_equipo_local; }
+    public String getNombrePaisEquipoLocal() { return nombrePaisEquipoLocal; }
+    public void setNombrePaisEquipoLocal(String nombrePaisEquipoLocal) { this.nombrePaisEquipoLocal = nombrePaisEquipoLocal; }
 
-    public String getNombrePaisEquipoVisitante() { return nombre_pais_equipo_visitante; }
-    public void setNombrePaisEquipoVisitante(String nombre_pais_equipo_visitante) { 
-        this.nombre_pais_equipo_visitante = nombre_pais_equipo_visitante; 
-    }
+    public String getNombrePaisEquipoVisitante() { return nombrePaisEquipoVisitante; }
+    public void setNombrePaisEquipoVisitante(String nombrePaisEquipoVisitante) { this.nombrePaisEquipoVisitante = nombrePaisEquipoVisitante; }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof AdministradorGestionaEventoId)) return false;
         AdministradorGestionaEventoId that = (AdministradorGestionaEventoId) o;
-        return Objects.equals(id_administrador, that.id_administrador) &&
-               Objects.equals(estadio_nombre, that.estadio_nombre) &&
-               Objects.equals(estadio_direccion_pais, that.estadio_direccion_pais) &&
-               Objects.equals(estadio_direccion_ciudad, that.estadio_direccion_ciudad) &&
-               Objects.equals(fecha_hora_partido, that.fecha_hora_partido) &&
-               Objects.equals(nombre_pais_equipo_local, that.nombre_pais_equipo_local) &&
-               Objects.equals(nombre_pais_equipo_visitante, that.nombre_pais_equipo_visitante);
+        return Objects.equals(idAdministrador, that.idAdministrador) &&
+               Objects.equals(estadioNombre, that.estadioNombre) &&
+               Objects.equals(estadioDireccionPais, that.estadioDireccionPais) &&
+               Objects.equals(estadioDireccionCiudad, that.estadioDireccionCiudad) &&
+               Objects.equals(fechaHoraPartido, that.fechaHoraPartido) &&
+               Objects.equals(nombrePaisEquipoLocal, that.nombrePaisEquipoLocal) &&
+               Objects.equals(nombrePaisEquipoVisitante, that.nombrePaisEquipoVisitante);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id_administrador, estadio_nombre, estadio_direccion_pais,
-                estadio_direccion_ciudad, fecha_hora_partido, nombre_pais_equipo_local,
-                nombre_pais_equipo_visitante);
+        return Objects.hash(idAdministrador, estadioNombre, estadioDireccionPais,
+                estadioDireccionCiudad, fechaHoraPartido, nombrePaisEquipoLocal,
+                nombrePaisEquipoVisitante);
     }
 }
