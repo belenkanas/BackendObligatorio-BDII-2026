@@ -50,7 +50,7 @@ CREATE TABLE general (
   
 CREATE TABLE dispositivo_escaneo (  
     id INT AUTO_INCREMENT PRIMARY KEY,  
-    nro_legajo VARCHAR(20) UNIQUE,  
+    nro_legajo VARCHAR(20),  
     FOREIGN KEY (nro_legajo) REFERENCES funcionario(nro_legajo) 
 );  
   
