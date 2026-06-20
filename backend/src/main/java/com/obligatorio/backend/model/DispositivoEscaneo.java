@@ -19,4 +19,10 @@ public class DispositivoEscaneo {
 
     public Integer getId() { return id; }
     public void setId(Integer id) { this.id = id; }
+
+    // Numero de legajo del funcionario asignado a este dispositivo. Que es foreign key a funcionario(nro_legajo)
+    @Column(name = "nro_legajo")
+    private String nroLegajo;
+    public String getNroLegajo() { return nroLegajo; }
+    public void setNroLegajo(String nroLegajo) { this.nroLegajo = nroLegajo; }
 }
