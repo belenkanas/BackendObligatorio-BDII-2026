@@ -27,13 +27,13 @@ MYSQL_PASSWORD=admin123
 
 ## 2. Levantar la base de datos
 
-Desde la raíz del repositorio:
+Desde la raíz del repositorio ejecutar:
 
 ```bash
 docker-compose up -d
 ```
 
-Esto levanta MySQL en el puerto **3307** y crea el esquema automáticamente. Podes verificar que esté listo con:
+Esto levanta una instancia de MySQL en el puerto **3307**. El esquema de la base de datos se genera automáticamente durante la inicialización del backend. Puede verificarse que el contenedor se encuentre en funcionamiento mediante:
 
 ```bash
 docker logs obligatorio2026_db
@@ -48,28 +48,19 @@ cd backend
 ./mvnw spring-boot:run
 ```
 
-> En Windows usar `mvnw.cmd spring-boot:run`
-
 El servidor arranca en **http://localhost:8080**.
 
-Al iniciar, Hibernate crea/actualiza las tablas automáticamente y se insertan los datos iniciales (48 equipos del Mundial 2026 y 16 estadios sede) desde `src/main/resources/data/inserts.sql`.
-
----
-
-### Verificar que funciona
-
-```bash
-curl http://localhost:8080/eventos
-```
+Al iniciar, Hibernate crea las tablas automáticamente y se insertan los datos iniciales (48 equipos del Mundial 2026 y 16 estadios sede) desde `src/main/resources/data/inserts.sql`.
 
 ---
 
 ## 4. Frontend
 
-El frontend de la aplicación se encuentra en un repositorio separado:
+El frontend de la aplicación se encuentra en un repositorio separado. Para acceder a él:
+
 https://github.com/belenkanas/FrontendObligatorio-BDII-2026.git
 
-Para ejecutarlo y ver los primeros pasos, seguir las instrucciones del README correspondiente.
+Para ejecutarlo y ver los primeros pasos, seguir las instrucciones del README.md correspondiente.
 
 ---
 
@@ -78,20 +69,21 @@ Para ejecutarlo y ver los primeros pasos, seguir las instrucciones del README co
 ```
 /
 ├── backend/
-  ├── src/
-    ├── main/
-      ├──java/com/obligatorio/backend/
-        ├── config/
-        ├── controller/
-        ├── model/
-        ├── repository/
-        ├── scheduler/
-        ├── security/
-        ├── service/
-        ├── Main.java
-      ├──resources/
-        ├── data/
-        ├── application.properties
+|  └── src/
+|    └── main/
+|      ├── java/com/obligatorio/backend/
+|      |  ├── config/
+|      |  ├── controller/
+|      |  ├── dto/
+|      |  ├── model/
+|      |  ├── repository/
+|      |  ├── scheduler/
+|      |  ├── security/
+|      |  ├── service/
+|      |  └── Main.java
+|      └── resources/
+|        ├── data/
+|        └── application.properties
 ├── mer/
 ├── sql/
 ├── .env  
@@ -107,6 +99,7 @@ Para ejecutarlo y ver los primeros pasos, seguir las instrucciones del README co
 |------|-----------|
 | Backend | Java 21, Spring Boot 3.5, Spring Data JPA |
 | Base de datos | MySQL 8.0 (Docker) |
+| Contenedorización | Docker, Docker Compose |
 | Seguridad | BCrypt (Spring Security Crypto) |
 | Frontend | React Native, Expo Router |
 
@@ -114,12 +107,18 @@ Para ejecutarlo y ver los primeros pasos, seguir las instrucciones del README co
 
 ## Endpoints
 
+**Autenticación**
+
+```
+POST /auth/registro - Registra un nuevo usuario
+POST /auth/login - Inicia sesión y devuelve un token JWT
+
+```
 
 ---
-
 
 ## Notas
 
 - El archivo `.env` está en `.gitignore` y **no debe commitearse**.
 - La base de datos corre en el puerto `3307` para evitar conflictos con instancias locales de MySQL.
-- Los datos iniciales se insertan automáticamente al levantar el backend usando `ON DUPLICATE KEY UPDATE`, por lo que pueden ejecutarse múltiples veces sin generar duplicados.
+- Los datos iniciales se insertan automáticamente durante la inicialización del backend utilizando la cláusula `ON DUPLICATE KEY UPDATE`, evitando la generación de registros duplicados en ejecuciones sucesivas.

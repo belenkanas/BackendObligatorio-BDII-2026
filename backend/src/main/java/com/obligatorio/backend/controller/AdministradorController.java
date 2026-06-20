@@ -25,7 +25,9 @@ import com.obligatorio.backend.model.General;
 import com.obligatorio.backend.model.Perfil;
 import com.obligatorio.backend.model.Usuario;
 import com.obligatorio.backend.repository.EntradaRepository;
+import com.obligatorio.backend.repository.FuncionarioAsignadoASectorRepository;
 import com.obligatorio.backend.repository.GeneralRepository;
+import com.obligatorio.backend.repository.VentaRepository;
 import com.obligatorio.backend.service.AdministradorService;
 import com.obligatorio.backend.service.FuncionarioService;
 import com.obligatorio.backend.service.GeneralService;
@@ -60,7 +62,13 @@ public class AdministradorController {
     private EntradaRepository entradaRepository;
 
     @Autowired
+    private FuncionarioAsignadoASectorRepository funcionarioAsignadoASectorRepository;
+
+    @Autowired
     private GeneralRepository generalRepository;
+
+    @Autowired
+    private VentaRepository ventaRepository;
 
     @GetMapping
     public List<Administrador> obtenerTodos() {
@@ -140,11 +148,32 @@ public class AdministradorController {
             return ResponseEntity.badRequest().body("Usuario no encontrado");
         }
 
-        long entradasActivas = entradaRepository.countByIdGeneralPropietarioAndEstadoIn(
-            idPerfil, List.of("activa", "en_transferencia")
-        );
-        if (entradasActivas > 0) {
-            return ResponseEntity.badRequest().body("El usuario tiene entradas activas o en transferencia, no se puede cambiar el rol");
+        // validar que el usuario actual general no tenga entradas activas
+        if (generalService.obtenerPorId(idPerfil).isPresent()) {
+            long entradasActivas = entradaRepository.countByIdGeneralPropietarioAndEstadoIn(
+                idPerfil, List.of("activa", "en_transferencia")
+            );
+
+            if (entradasActivas > 0) {
+                return ResponseEntity.badRequest().body("El usuario tiene entradas activas o en transferencia, no se puede cambiar el rol");
+            }
+        }
+
+        // validar que general no tenga ventas asociadas
+        if (ventaRepository.existsByIdGeneral(idPerfil)) {
+            return ResponseEntity.badRequest().body("El usuario tiene ventas asociadas, no se puede cambiar el rol");
+        }
+
+        // validar que el usuario actual funcionario no tenga sectores asignados
+        if (funcionarioService.obtenerPorId(idPerfil).isPresent()) {
+            Optional<Funcionario> funcionarioOpt = funcionarioService.obtenerPorId(idPerfil);
+            if (funcionarioOpt.isPresent()) {
+                String nroLegajo = funcionarioOpt.get().getNroLegajo();
+                long sectoresAsignados = funcionarioAsignadoASectorRepository.findByIdNroLegajo(nroLegajo).size();
+                if (sectoresAsignados > 0) {
+                    return ResponseEntity.badRequest().body("El usuario tiene sectores asignados, no se puede cambiar el rol");
+                }
+            }
         }
 
         // borrar rol anterior

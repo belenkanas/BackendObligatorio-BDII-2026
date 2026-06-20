@@ -11,4 +11,7 @@ import com.obligatorio.backend.model.Venta;
 public interface VentaRepository extends JpaRepository<Venta, Integer> {
     @Query("SELECT v FROM Venta v WHERE v.general.id_general = :idGeneral")
     List<Venta> findByIdGeneral(@Param("idGeneral") Integer idGeneral);
+
+    @Query("SELECT CASE WHEN COUNT(v) > 0 THEN true ELSE false END FROM Venta v WHERE v.general.id_general = :idGeneral")
+    boolean existsByIdGeneral(@Param("idGeneral") Integer idGeneral);
 }
