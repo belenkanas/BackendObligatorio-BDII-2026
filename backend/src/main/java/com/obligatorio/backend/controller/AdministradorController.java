@@ -34,6 +34,9 @@ import com.obligatorio.backend.service.GeneralService;
 import com.obligatorio.backend.service.PerfilService;
 import com.obligatorio.backend.service.UsuarioService;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+
 @RestController
 @RequestMapping("/administradores")
 @CrossOrigin(origins = "*")
@@ -69,6 +72,9 @@ public class AdministradorController {
 
     @Autowired
     private VentaRepository ventaRepository;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @GetMapping
     public List<Administrador> obtenerTodos() {
@@ -185,11 +191,14 @@ public class AdministradorController {
             generalService.eliminar(idPerfil);
         }
 
-        // Recargar el perfil fresco de la BD después del delete
+        entityManager.flush();  // fuerza los cambios a la BD
+        entityManager.clear();  // limpia el caché de primer nivel
+
+        // Recargar el perfil fresco
         Perfil perfilFresco = perfilService.obtenerPorId(idPerfil)
             .orElseThrow(() -> new RuntimeException("Perfil no encontrado"));
-
-        // crear nuevo rol
+        
+            // crear nuevo rol
         switch (nuevoRol) {
             case "ADMINISTRADOR" -> {
                 Administrador admin = new Administrador();
