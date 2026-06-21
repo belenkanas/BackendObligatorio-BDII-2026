@@ -29,4 +29,28 @@ public class DispositivoEscaneoService {
     public void eliminar(Integer id) { 
         dispositivoRepository.deleteById(id); 
     }
+
+    public boolean existePorNroSerie(String nroSerie) {
+        return dispositivoRepository.existsByNroSerie(nroSerie);
+    }
+
+    public DispositivoEscaneo asignar(Integer id, String nroLegajo) {
+        DispositivoEscaneo disp = dispositivoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Dispositivo no encontrado"));
+
+        if (disp.getNroLegajo() != null) {
+            throw new RuntimeException("El dispositivo ya está asignado a un funcionario");
+        }
+
+        disp.setNroLegajo(nroLegajo);
+        return dispositivoRepository.save(disp);
+    }
+
+    public DispositivoEscaneo desasignar(Integer id) {
+        DispositivoEscaneo disp = dispositivoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Dispositivo no encontrado"));
+
+        disp.setNroLegajo(null);
+        return dispositivoRepository.save(disp);
+    }
 }
