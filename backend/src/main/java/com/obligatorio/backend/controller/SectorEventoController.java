@@ -69,6 +69,17 @@ public class SectorEventoController {
         sectorEventoService.eliminar(id);
     }
 
+    //Deshabilitar sector para un evento específico
+    @DeleteMapping("/deshabilitar")
+    public ResponseEntity<?> deshabilitar(@RequestBody SectorEvento sectorEvento) {
+        try {
+            sectorEventoService.eliminar(sectorEvento.getId());
+            return ResponseEntity.ok("Sector deshabilitado correctamente");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("No se pudo deshabilitar el sector");
+        }
+    }
+
     @GetMapping("/{estadioNombre}/{estadioDireccionPais}/{estadioDireccionCiudad}/{fechaHoraPartido}/{nombrePaisEquipoLocal}/{nombrePaisEquipoVisitante}/sectores")
     public ResponseEntity<?> obtenerPorEvento(
             @PathVariable String estadioNombre,

@@ -43,6 +43,8 @@ docker logs obligatorio2026_db
 
 ## 3. Levantar el backend
 
+Para levantar el backend, *el contenedor de Docker debe estar en ejecución en todo momento*.
+
 ```bash
 cd backend
 ./mvnw spring-boot:run
