@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.obligatorio.backend.model.DispositivoEscaneo;
 import com.obligatorio.backend.repository.DispositivoEscaneoRepository;
 import com.obligatorio.backend.repository.FuncionarioRepository;
+import com.obligatorio.backend.repository.ValidacionRepository;
 
 @Service
 public class DispositivoEscaneoService {
@@ -18,6 +19,9 @@ public class DispositivoEscaneoService {
 
     @Autowired
     private FuncionarioRepository funcionarioRepository;
+    
+    @Autowired
+    private ValidacionRepository validacionRepository;
 
     public List<DispositivoEscaneo> obtenerTodos() {
         return dispositivoRepository.findAll();
@@ -62,6 +66,11 @@ public class DispositivoEscaneoService {
         if (disp.getNroLegajo() == null) {
             throw new RuntimeException("El dispositivo no está asignado a ningún funcionario");
         }
+
+        // Borrar la validacion asociada
+        validacionRepository.findAll().stream()
+            .filter(v -> v.getId().getIdDispositivoEscaneo().equals(id))
+            .forEach(v -> validacionRepository.delete(v));
 
         disp.setNroLegajo(null);
         return dispositivoRepository.save(disp);
