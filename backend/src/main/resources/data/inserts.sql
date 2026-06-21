@@ -307,10 +307,11 @@ SELECT s.nombre, e.estadio_nombre, e.estadio_direccion_pais, e.estadio_direccion
            WHEN 'Tribuna Norte' THEN 250.00
            WHEN 'Tribuna Sur'   THEN 250.00
            WHEN 'General'       THEN 100.00
+           ELSE 100.00
        END AS costo
 FROM evento e
 JOIN sector s
-    ON s.estadio_nombre         = e.estadio_nombre
-   AND s.estadio_direccion_pais = e.estadio_direccion_pais
+    ON s.estadio_nombre           = e.estadio_nombre
+   AND s.estadio_direccion_pais   = e.estadio_direccion_pais
    AND s.estadio_direccion_ciudad = e.estadio_direccion_ciudad
 ON DUPLICATE KEY UPDATE costo = VALUES(costo);
