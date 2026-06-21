@@ -66,4 +66,11 @@ public class AdministradorService {
         // 3 - eliminar usuario
         usuarioRepository.delete(usuario);
     }
+
+    @Transactional
+    public void eliminarSoloRol(Integer id) {
+        Administrador administrador = administradorRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Administrador no encontrado"));
+        administradorRepository.delete(administrador);
+    }
 }

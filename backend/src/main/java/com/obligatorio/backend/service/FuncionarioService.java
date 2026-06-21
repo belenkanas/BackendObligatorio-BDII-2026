@@ -71,4 +71,11 @@ public class FuncionarioService {
         // eliminar usuario
         usuarioRepository.delete(usuario);
     }
+
+    @Transactional
+    public void eliminarSoloRol(Integer id) {
+        Funcionario funcionario = funcionarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Funcionario no encontrado"));
+        funcionarioRepository.delete(funcionario);
+    }
 }

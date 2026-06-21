@@ -66,4 +66,11 @@ public class GeneralService {
         // eliminar usuario
         usuarioRepository.delete(usuario);
     }
+
+    @Transactional
+    public void eliminarSoloRol(Integer id) {
+        General general = generalRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("General no encontrado"));
+        generalRepository.delete(general);
+    }
 }

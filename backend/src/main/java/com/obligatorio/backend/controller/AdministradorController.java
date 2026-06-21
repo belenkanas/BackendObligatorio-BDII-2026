@@ -182,40 +182,33 @@ public class AdministradorController {
             }
         }
 
-        // borrar rol anterior
+        // borrar solo el rol anterior (sin tocar Perfil ni Usuario)
         if (administradorService.obtenerPorId(idPerfil).isPresent()) {
-            administradorService.eliminar(idPerfil);
+            administradorService.eliminarSoloRol(idPerfil);
         } else if (funcionarioService.obtenerPorId(idPerfil).isPresent()) {
-            funcionarioService.eliminar(idPerfil);
+            funcionarioService.eliminarSoloRol(idPerfil);
         } else if (generalService.obtenerPorId(idPerfil).isPresent()) {
-            generalService.eliminar(idPerfil);
+            generalService.eliminarSoloRol(idPerfil);
         }
 
-        entityManager.flush();  // fuerza los cambios a la BD
-        entityManager.clear();  // limpia el caché de primer nivel
-
-        // Recargar el perfil fresco
-        Perfil perfilFresco = perfilService.obtenerPorId(idPerfil)
-            .orElseThrow(() -> new RuntimeException("Perfil no encontrado"));
-        
-            // crear nuevo rol
+        // crear nuevo rol
         switch (nuevoRol) {
             case "ADMINISTRADOR" -> {
                 Administrador admin = new Administrador();
-                admin.setPerfil(perfilFresco);  // <-- usá perfilFresco
+                admin.setPerfil(perfilOpt.get());
                 admin.setFecha_asignado(LocalDate.now());
                 admin.setPaisSede((String) datos.get("paisSede"));
                 administradorService.crear(admin);
             }
             case "FUNCIONARIO" -> {
                 Funcionario func = new Funcionario();
-                func.setPerfil(perfilFresco);  // <-- usá perfilFresco
+                func.setPerfil(perfilOpt.get());
                 func.setNroLegajo("LEG-" + idPerfil);
                 funcionarioService.crear(func);
             }
             case "GENERAL" -> {
                 General general = new General();
-                general.setPerfil(perfilFresco);  // <-- usá perfilFresco
+                general.setPerfil(perfilOpt.get());
                 general.setEstadoVerificacionId("pendiente");
                 general.setFecha_registro(LocalDate.now());
                 generalService.crear(general);
