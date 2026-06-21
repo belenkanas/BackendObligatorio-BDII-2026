@@ -96,8 +96,9 @@ public class DispositivoEscaneoController {
             return ResponseEntity.badRequest().body("Dispositivo no encontrado");
         }
 
-        if (validacionRepository.existsByIdIdDispositivoEscaneo(id)) {
-            return ResponseEntity.badRequest().body("El dispositivo tiene validaciones registradas, no se puede eliminar");
+        if (validacionRepository.existePorIdDispositivo(id)) {
+            return ResponseEntity.badRequest()
+                .body("El dispositivo tiene validaciones registradas, no se puede eliminar");
         }
 
         dispositivoEscaneoService.eliminar(id);
