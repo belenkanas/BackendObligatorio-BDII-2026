@@ -65,14 +65,14 @@ CREATE TABLE partido (
   
 CREATE TABLE estadio (  
     nombre VARCHAR(100),  
-    direccion_pais VARCHAR(50),  
+    direccion_pais ENUM ('México', 'Estados Unidos', 'Canadá') NOT NULL,
     direccion_ciudad VARCHAR(50),  
     PRIMARY KEY (nombre, direccion_pais, direccion_ciudad)  
 );  
   
 CREATE TABLE evento (  
     estadio_nombre VARCHAR(100),  
-    estadio_direccion_pais VARCHAR(50),  
+    estadio_direccion_pais ENUM ('México', 'Estados Unidos', 'Canadá') NOT NULL,  
     estadio_direccion_ciudad VARCHAR(50),  
     fecha_hora_partido TIMESTAMP,  
     nombre_pais_equipo_local VARCHAR(50),  
@@ -103,7 +103,7 @@ CREATE TABLE evento (
 CREATE TABLE sector (  
     nombre VARCHAR(50),  
     estadio_nombre VARCHAR(100),  
-    estadio_direccion_pais VARCHAR(50),  
+    estadio_direccion_pais ENUM ('México', 'Estados Unidos', 'Canadá') NOT NULL,  
     estadio_direccion_ciudad VARCHAR(50),  
     capacidad_max INT,  
   
@@ -121,7 +121,7 @@ CREATE TABLE sector (
 CREATE TABLE sector_evento (  
     nombre_sector VARCHAR(50),  
     estadio_nombre VARCHAR(100),  
-    estadio_direccion_pais VARCHAR(50),  
+    estadio_direccion_pais ENUM ('México', 'Estados Unidos', 'Canadá') NOT NULL,  
     estadio_direccion_ciudad VARCHAR(50),  
     fecha_hora_partido TIMESTAMP,  
     costo DECIMAL(10,2),  
