@@ -1,4 +1,5 @@
 package com.obligatorio.backend.controller;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -15,27 +16,35 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.obligatorio.backend.model.DispositivoEscaneo;
+import com.obligatorio.backend.repository.ValidacionRepository;
 import com.obligatorio.backend.service.DispositivoEscaneoService;
 
 @RestController
 @RequestMapping("/dispositivos")
 @CrossOrigin(origins = "*")
 public class DispositivoEscaneoController {
-    
+
     @Autowired
     private DispositivoEscaneoService dispositivoEscaneoService;
 
+    @Autowired
+    private ValidacionRepository validacionRepository;
+
     @GetMapping
-    public List<DispositivoEscaneo> obtenerTodos() { 
-        return dispositivoEscaneoService.obtenerTodos(); 
+    public List<DispositivoEscaneo> obtenerTodos() {
+        return dispositivoEscaneoService.obtenerTodos();
     }
 
     @GetMapping("/{id}")
-    public Optional<DispositivoEscaneo> obtenerPorId(@PathVariable Integer id) { 
-        return dispositivoEscaneoService.obtenerPorId(id); 
+    public Optional<DispositivoEscaneo> obtenerPorId(@PathVariable Integer id) {
+        return dispositivoEscaneoService.obtenerPorId(id);
     }
 
-    //cargar un nuevo dispositivo con nroSerie único, sin asignar a ningún funcionario
+    @GetMapping("/funcionario/{nroLegajo}")
+    public List<DispositivoEscaneo> obtenerPorFuncionario(@PathVariable String nroLegajo) {
+        return dispositivoEscaneoService.obtenerPorFuncionario(nroLegajo);
+    }
+
     @PostMapping({"", "/"})
     public ResponseEntity<?> crear(@RequestBody Map<String, Object> datos) {
         String nroSerie = (String) datos.get("nroSerie");
@@ -55,7 +64,6 @@ public class DispositivoEscaneoController {
         return ResponseEntity.ok(guardado);
     }
 
-    // asignar un dispositivo a un funcionario por su nroLegajo, verificando que el dispositivo no esté ya asignado y que el funcionario exista
     @PostMapping("/{id}/asignar")
     public ResponseEntity<?> asignar(@PathVariable Integer id, @RequestBody Map<String, Object> datos) {
         String nroLegajo = (String) datos.get("nroLegajo");
@@ -72,7 +80,6 @@ public class DispositivoEscaneoController {
         }
     }
 
-    // desasignar un dispositivo de su funcionario, dejando el nroLegajo en null
     @PostMapping("/{id}/desasignar")
     public ResponseEntity<?> desasignar(@PathVariable Integer id) {
         try {
@@ -81,10 +88,19 @@ public class DispositivoEscaneoController {
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-}
+    }
 
     @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable Integer id) { 
-        dispositivoEscaneoService.eliminar(id); 
+    public ResponseEntity<?> eliminar(@PathVariable Integer id) {
+        if (!dispositivoEscaneoService.obtenerPorId(id).isPresent()) {
+            return ResponseEntity.badRequest().body("Dispositivo no encontrado");
+        }
+
+        if (validacionRepository.existsByIdIdDispositivoEscaneo(id)) {
+            return ResponseEntity.badRequest().body("El dispositivo tiene validaciones registradas, no se puede eliminar");
+        }
+
+        dispositivoEscaneoService.eliminar(id);
+        return ResponseEntity.ok("Dispositivo eliminado");
     }
 }

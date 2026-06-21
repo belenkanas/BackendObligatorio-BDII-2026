@@ -8,4 +8,5 @@ import com.obligatorio.backend.model.ValidacionId;
 
 @Repository
 public interface ValidacionRepository extends JpaRepository<Validacion, ValidacionId> {
+    boolean existsByIdIdDispositivoEscaneo(Integer idDispositivoEscaneo);
 }

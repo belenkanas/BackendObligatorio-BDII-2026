@@ -1,4 +1,5 @@
 package com.obligatorio.backend.service;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.obligatorio.backend.model.DispositivoEscaneo;
 import com.obligatorio.backend.repository.DispositivoEscaneoRepository;
+import com.obligatorio.backend.repository.FuncionarioRepository;
 
 @Service
 public class DispositivoEscaneoService {
@@ -14,24 +16,27 @@ public class DispositivoEscaneoService {
     @Autowired
     private DispositivoEscaneoRepository dispositivoRepository;
 
-    public List<DispositivoEscaneo> obtenerTodos() { 
-        return dispositivoRepository.findAll(); 
+    @Autowired
+    private FuncionarioRepository funcionarioRepository;
+
+    public List<DispositivoEscaneo> obtenerTodos() {
+        return dispositivoRepository.findAll();
     }
 
-    public Optional<DispositivoEscaneo> obtenerPorId(Integer id) { 
-        return dispositivoRepository.findById(id); 
+    public Optional<DispositivoEscaneo> obtenerPorId(Integer id) {
+        return dispositivoRepository.findById(id);
     }
 
-    public DispositivoEscaneo crear(DispositivoEscaneo disp) { 
-        return dispositivoRepository.save(disp); 
-    }
-
-    public void eliminar(Integer id) { 
-        dispositivoRepository.deleteById(id); 
+    public List<DispositivoEscaneo> obtenerPorFuncionario(String nroLegajo) {
+        return dispositivoRepository.findByNroLegajo(nroLegajo);
     }
 
     public boolean existePorNroSerie(String nroSerie) {
         return dispositivoRepository.existsByNroSerie(nroSerie);
+    }
+
+    public DispositivoEscaneo crear(DispositivoEscaneo disp) {
+        return dispositivoRepository.save(disp);
     }
 
     public DispositivoEscaneo asignar(Integer id, String nroLegajo) {
@@ -42,6 +47,10 @@ public class DispositivoEscaneoService {
             throw new RuntimeException("El dispositivo ya está asignado a un funcionario");
         }
 
+        if (!funcionarioRepository.existsByNroLegajo(nroLegajo)) {
+            throw new RuntimeException("El funcionario no existe");
+        }
+
         disp.setNroLegajo(nroLegajo);
         return dispositivoRepository.save(disp);
     }
@@ -50,7 +59,15 @@ public class DispositivoEscaneoService {
         DispositivoEscaneo disp = dispositivoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Dispositivo no encontrado"));
 
+        if (disp.getNroLegajo() == null) {
+            throw new RuntimeException("El dispositivo no está asignado a ningún funcionario");
+        }
+
         disp.setNroLegajo(null);
         return dispositivoRepository.save(disp);
+    }
+
+    public void eliminar(Integer id) {
+        dispositivoRepository.deleteById(id);
     }
 }

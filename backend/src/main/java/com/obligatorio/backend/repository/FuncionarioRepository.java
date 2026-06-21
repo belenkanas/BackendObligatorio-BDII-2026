@@ -10,4 +10,5 @@ import com.obligatorio.backend.model.Funcionario;
 @Repository
 public interface FuncionarioRepository extends JpaRepository<Funcionario, Integer> {
     Optional<Funcionario> findByNroLegajo(String nroLegajo);
+    boolean existsByNroLegajo(String nroLegajo);
 }

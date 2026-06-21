@@ -21,7 +21,7 @@ public class DispositivoEscaneo {
     public void setId(Integer id) { this.id = id; }
 
     // Numero de serie del dispositivo
-    @Column(name = "nro_serie")
+    @Column(name = "nro_serie", unique = true, nullable = false)
     private String nroSerie;
     public String getNroSerie() { return nroSerie; }
     public void setNroSerie(String nroSerie) { this.nroSerie = nroSerie; }
