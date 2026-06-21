@@ -185,24 +185,28 @@ public class AdministradorController {
             generalService.eliminar(idPerfil);
         }
 
+        // Recargar el perfil fresco de la BD después del delete
+        Perfil perfilFresco = perfilService.obtenerPorId(idPerfil)
+            .orElseThrow(() -> new RuntimeException("Perfil no encontrado"));
+
         // crear nuevo rol
         switch (nuevoRol) {
             case "ADMINISTRADOR" -> {
                 Administrador admin = new Administrador();
-                admin.setPerfil(perfilOpt.get());
+                admin.setPerfil(perfilFresco);  // <-- usá perfilFresco
                 admin.setFecha_asignado(LocalDate.now());
                 admin.setPaisSede((String) datos.get("paisSede"));
                 administradorService.crear(admin);
             }
             case "FUNCIONARIO" -> {
                 Funcionario func = new Funcionario();
-                func.setPerfil(perfilOpt.get());
+                func.setPerfil(perfilFresco);  // <-- usá perfilFresco
                 func.setNroLegajo("LEG-" + idPerfil);
                 funcionarioService.crear(func);
             }
             case "GENERAL" -> {
                 General general = new General();
-                general.setPerfil(perfilOpt.get());
+                general.setPerfil(perfilFresco);  // <-- usá perfilFresco
                 general.setEstadoVerificacionId("pendiente");
                 general.setFecha_registro(LocalDate.now());
                 generalService.crear(general);
