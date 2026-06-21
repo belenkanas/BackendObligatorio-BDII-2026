@@ -7,9 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.obligatorio.backend.model.DispositivoEscaneo;
+import com.obligatorio.backend.model.Validacion;
+import com.obligatorio.backend.model.ValidacionId;
 import com.obligatorio.backend.repository.DispositivoEscaneoRepository;
 import com.obligatorio.backend.repository.FuncionarioRepository;
 import com.obligatorio.backend.repository.ValidacionRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class DispositivoEscaneoService {
@@ -43,6 +47,7 @@ public class DispositivoEscaneoService {
         return dispositivoRepository.save(disp);
     }
 
+    @Transactional
     public DispositivoEscaneo asignar(Integer id, String nroLegajo) {
         DispositivoEscaneo disp = dispositivoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Dispositivo no encontrado"));
@@ -55,8 +60,20 @@ public class DispositivoEscaneoService {
             throw new RuntimeException("El funcionario no existe");
         }
 
+        // Actualizar nroLegajo en dispositivo_escaneo
         disp.setNroLegajo(nroLegajo);
-        return dispositivoRepository.save(disp);
+        dispositivoRepository.save(disp);
+
+        // Insertar en validacion
+        ValidacionId validacionId = new ValidacionId();
+        validacionId.setNroLegajoFuncionario(nroLegajo);
+        validacionId.setIdDispositivoEscaneo(id);
+
+        Validacion validacion = new Validacion();
+        validacion.setId(validacionId);
+        validacionRepository.save(validacion);
+
+        return disp;
     }
 
     public DispositivoEscaneo desasignar(Integer id) {
