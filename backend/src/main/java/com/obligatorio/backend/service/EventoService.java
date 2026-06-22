@@ -5,22 +5,49 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.obligatorio.backend.model.AdministradorGestionaEvento;
+import com.obligatorio.backend.model.AdministradorGestionaEventoId;
 import com.obligatorio.backend.model.Evento;
 import com.obligatorio.backend.model.EventoId;
+import com.obligatorio.backend.repository.AdministradorGestionaEventoRepository;
 import com.obligatorio.backend.repository.EventoRepository;
 
 @Service
 public class EventoService {
-    
+
     @Autowired
     private EventoRepository eventoRepository;
+
+    @Autowired
+    private AdministradorGestionaEventoRepository administradorGestionaEventoRepository;
 
     public List<Evento> obtenerTodos() { return eventoRepository.findAll(); }
 
     public Optional<Evento> obtenerPorId(EventoId id) { return eventoRepository.findById(id); }
-    
-    public Evento crear(Evento evento) { return eventoRepository.save(evento); }
-    
+
+    @Transactional
+    public Evento crear(Evento evento, Integer idAdministrador) {
+        Evento eventoGuardado = eventoRepository.save(evento);
+
+        EventoId eid = eventoGuardado.getId();
+
+        AdministradorGestionaEventoId relId = new AdministradorGestionaEventoId();
+        relId.setIdAdministrador(idAdministrador);
+        relId.setEstadioNombre(eid.getEstadioNombre());
+        relId.setEstadioDireccionPais(eid.getEstadioDireccionPais());
+        relId.setEstadioDireccionCiudad(eid.getEstadioDireccionCiudad());
+        relId.setFechaHoraPartido(eid.getFechaHoraPartido());
+        relId.setNombrePaisEquipoLocal(eid.getNombrePaisEquipoLocal());
+        relId.setNombrePaisEquipoVisitante(eid.getNombrePaisEquipoVisitante());
+
+        AdministradorGestionaEvento relacion = new AdministradorGestionaEvento();
+        relacion.setId(relId);
+        administradorGestionaEventoRepository.save(relacion);
+
+        return eventoGuardado;
+    }
+
     public void eliminar(EventoId id) { eventoRepository.deleteById(id); }
 }
