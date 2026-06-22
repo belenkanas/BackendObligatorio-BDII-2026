@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -65,5 +66,15 @@ public class FuncionarioAsignadoASectorController {
         id.setEstadioDireccionPais(estadioDireccionPais);
         id.setEstadioDireccionCiudad(estadioDireccionCiudad);
         funcionarioAsignadoASectorService.eliminar(id);
+    }
+
+    @DeleteMapping("/desasignar")
+    public ResponseEntity<?> desasignar(@RequestBody FuncionarioAsignadoASector asignacion) {
+        try {
+            funcionarioAsignadoASectorService.eliminar(asignacion.getId());
+            return ResponseEntity.ok("Asignación eliminada correctamente");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("No se pudo eliminar la asignación");
+        }
     }
 }
