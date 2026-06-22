@@ -4,6 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.obligatorio.backend.model.Evento;
 import com.obligatorio.backend.model.Funcionario;
 import com.obligatorio.backend.model.FuncionarioAsignadoASector;
@@ -22,41 +24,50 @@ import com.obligatorio.backend.service.FuncionarioService;
 @RestController
 @RequestMapping("/funcionarios")
 @CrossOrigin(origins = "*")
+
 public class FuncionarioController {
+
     @Autowired
-private FuncionarioService funcionarioService;
+    private FuncionarioService funcionarioService;
+
     @Autowired
-private com.obligatorio.backend.service.FuncionarioAsignadoASectorService funcionarioAsignadoASectorService;
+    private com.obligatorio.backend.service.FuncionarioAsignadoASectorService funcionarioAsignadoASectorService;
+
     @Autowired
-private EventoRepository eventoRepository;
+    private EventoRepository eventoRepository;
+
     @GetMapping
-public List<Funcionario> obtenerTodos() {
-return funcionarioService.obtenerTodos();
+    public List<Funcionario> obtenerTodos() {
+        return funcionarioService.obtenerTodos();
     }
+
     @GetMapping("/{id}")
-public Optional<Funcionario> obtenerPorId(@PathVariable Integer id) {
-return funcionarioService.obtenerPorId(id);
+    public Optional<Funcionario> obtenerPorId(@PathVariable Integer id) {
+        return funcionarioService.obtenerPorId(id);
     }
+    
     @GetMapping("/legajo/{nroLegajo}")
-public Optional<Funcionario> obtenerPorNroLegajo(@PathVariable String nroLegajo) {
-return funcionarioService.obtenerPorNroLegajo(nroLegajo);
+    public Optional<Funcionario> obtenerPorNroLegajo(@PathVariable String nroLegajo) {
+        return funcionarioService.obtenerPorNroLegajo(nroLegajo);
     }
+
     @PostMapping
-public Funcionario crear(@RequestBody Funcionario funcionario) {
-return funcionarioService.crear(funcionario);
+    public Funcionario crear(@RequestBody Funcionario funcionario) {
+        return funcionarioService.crear(funcionario);
     }
+
     @DeleteMapping("/{id}")
-public void eliminar(@PathVariable Integer id) {
-funcionarioService.eliminar(id);
+    public void eliminar(@PathVariable Integer id) {
+        funcionarioService.eliminar(id);
     }
+    
     @GetMapping("/{id}/eventos")
-public List<FuncionarioAsignadoASector> obtenerEventosAsignados(
-            @PathVariable Integer id) {
-Funcionario funcionario = funcionarioService
-                .obtenerPorId(id)
-                .orElseThrow();
-return funcionarioAsignadoASectorService
-                .obtenerPorLegajo(funcionario.getNroLegajo());
+    public List<FuncionarioAsignadoASector> obtenerEventosAsignados(@PathVariable Integer id) {
+        Funcionario funcionario = funcionarioService
+                        .obtenerPorId(id)
+                        .orElseThrow();
+        return funcionarioAsignadoASectorService
+                        .obtenerPorLegajo(funcionario.getNroLegajo());
     }
 
     @GetMapping("/{id}/asignaciones")

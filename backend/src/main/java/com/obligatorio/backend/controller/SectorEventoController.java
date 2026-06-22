@@ -1,7 +1,9 @@
 package com.obligatorio.backend.controller;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -69,6 +72,17 @@ public class SectorEventoController {
         sectorEventoService.eliminar(id);
     }
 
+    //Deshabilitar sector para un evento específico
+    @DeleteMapping("/deshabilitar")
+    public ResponseEntity<?> deshabilitar(@RequestBody SectorEvento sectorEvento) {
+        try {
+            sectorEventoService.eliminar(sectorEvento.getId());
+            return ResponseEntity.ok("Sector deshabilitado correctamente");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("No se pudo deshabilitar el sector");
+        }
+    }
+
     @GetMapping("/{estadioNombre}/{estadioDireccionPais}/{estadioDireccionCiudad}/{fechaHoraPartido}/{nombrePaisEquipoLocal}/{nombrePaisEquipoVisitante}/sectores")
     public ResponseEntity<?> obtenerPorEvento(
             @PathVariable String estadioNombre,
@@ -85,5 +99,27 @@ public class SectorEventoController {
         );
 
         return ResponseEntity.ok(sectores);
+    }
+
+    // Actualizar el costo de un sector para un evento específico
+    @PatchMapping("/actualizar-costo")
+    public ResponseEntity<?> actualizarCosto(@RequestBody Map<String, Object> datos) {
+        try {
+            SectorEventoId id = new SectorEventoId();
+            Map<String, Object> idMap = (Map<String, Object>) datos.get("id");
+            id.setNombreSector((String) idMap.get("nombreSector"));
+            id.setEstadioNombre((String) idMap.get("estadioNombre"));
+            id.setEstadioDireccionPais((String) idMap.get("estadioDireccionPais"));
+            id.setEstadioDireccionCiudad((String) idMap.get("estadioDireccionCiudad"));
+            id.setFechaHoraPartido(LocalDateTime.parse((String) idMap.get("fechaHoraPartido")));
+
+            BigDecimal nuevoCosto = new BigDecimal(datos.get("costo").toString());
+
+            return sectorEventoService.actualizarCosto(id, nuevoCosto)
+                .map(se -> ResponseEntity.ok((Object) se))
+                .orElse(ResponseEntity.badRequest().body("Sector no encontrado"));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error al actualizar el costo: " + e.getMessage());
+        }
     }
 }

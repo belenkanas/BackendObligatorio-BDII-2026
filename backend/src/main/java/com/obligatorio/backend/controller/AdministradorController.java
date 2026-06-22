@@ -34,6 +34,9 @@ import com.obligatorio.backend.service.GeneralService;
 import com.obligatorio.backend.service.PerfilService;
 import com.obligatorio.backend.service.UsuarioService;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+
 @RestController
 @RequestMapping("/administradores")
 @CrossOrigin(origins = "*")
@@ -70,6 +73,9 @@ public class AdministradorController {
     @Autowired
     private VentaRepository ventaRepository;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     @GetMapping
     public List<Administrador> obtenerTodos() {
         return administradorService.obtenerTodos();
@@ -80,6 +86,8 @@ public class AdministradorController {
         return administradorService.obtenerPorId(id);
     }
 
+    //Función para crear un nuevo administrador, la idea es que solamente un admin pueda crear a otro admin, desde el frontend
+    //El endpoint es POST /administradores, y recibe un JSON con los datos del nuevo admin (mail, password y paisSede)
     @Transactional
     @PostMapping
     public ResponseEntity<?> crear(@RequestBody CrearAdministradorRequest datos) {
@@ -91,6 +99,15 @@ public class AdministradorController {
             return ResponseEntity.badRequest().body("La contraseña es obligatoria");
         }
 
+        if (datos.getPaisSede() == null || datos.getPaisSede().isBlank()) {
+            return ResponseEntity.badRequest().body("El pais sede es obligatorio");
+        }
+
+        String paisSede = datos.getPaisSede().trim();
+        if (!paisSede.equals("México") && !paisSede.equals("Estados Unidos") && !paisSede.equals("Canadá")) {
+            return ResponseEntity.badRequest().body("El pais sede debe ser uno de: México, Estados Unidos o Canadá");
+        }
+
         String mail = datos.getMail().trim();
         if (usuarioService.obtenerPorMail(mail).isPresent()) {
             return ResponseEntity.badRequest().body("El correo electrónico ya está registrado");
@@ -99,6 +116,13 @@ public class AdministradorController {
         Usuario usuario = new Usuario();
         usuario.setMail(mail);
         usuario.setPassword(passwordEncoder.encode(datos.getPassword()));
+        usuario.setDireccionPais(paisSede);
+        usuario.setDocumentoTipo("N/A");
+        usuario.setDocumentoNumeroDoc("N/A");
+        usuario.setDireccionCalle("N/A");
+        usuario.setDireccionNumero("N/A");
+        usuario.setDireccionCodigoPostal("N/A");
+        usuario.setDireccionLocalidad("N/A");
         usuarioService.crear(usuario);
 
         Perfil perfil = new Perfil();
@@ -108,7 +132,7 @@ public class AdministradorController {
         Administrador administrador = new Administrador();
         administrador.setPerfil(perfil);
         administrador.setFecha_asignado(LocalDate.now());
-        administrador.setPaisSede(datos.getPaisSede());
+        administrador.setPaisSede(paisSede);
 
         return ResponseEntity.ok(administradorService.crear(administrador));
     }
@@ -158,13 +182,13 @@ public class AdministradorController {
             }
         }
 
-        // borrar rol anterior
+        // borrar solo el rol anterior (sin tocar Perfil ni Usuario)
         if (administradorService.obtenerPorId(idPerfil).isPresent()) {
-            administradorService.eliminar(idPerfil);
+            administradorService.eliminarSoloRol(idPerfil);
         } else if (funcionarioService.obtenerPorId(idPerfil).isPresent()) {
-            funcionarioService.eliminar(idPerfil);
+            funcionarioService.eliminarSoloRol(idPerfil);
         } else if (generalService.obtenerPorId(idPerfil).isPresent()) {
-            generalService.eliminar(idPerfil);
+            generalService.eliminarSoloRol(idPerfil);
         }
 
         // crear nuevo rol
@@ -197,6 +221,8 @@ public class AdministradorController {
         return ResponseEntity.ok("Rol cambiado correctamente");
     }
 
+    //Endpoint de prueba para crear un admin temporal, con mail, contraseña y sede fijo.
+    //El endpoint es POST /administradores/crear-admin-temporal, y no recibe ningún parámetro, simplemente crea un admin con los datos predefinidos.
     @Transactional
     @PostMapping("/crear-admin-temporal")
     public ResponseEntity<?> crearAdminTemporal() {

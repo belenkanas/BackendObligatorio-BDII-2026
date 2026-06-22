@@ -43,6 +43,8 @@ docker logs obligatorio2026_db
 
 ## 3. Levantar el backend
 
+Para levantar el backend, *el contenedor de Docker debe estar en ejecución en todo momento*.
+
 ```bash
 cd backend
 ./mvnw spring-boot:run
@@ -105,18 +107,132 @@ Para ejecutarlo y ver los primeros pasos, seguir las instrucciones del README.md
 
 ---
 
-## Endpoints
+## Endpoints más importantes
 
-**Autenticación**
+### Autenticación
 
-```
-POST /auth/registro - Registra un nuevo usuario
-POST /auth/login - Inicia sesión y devuelve un token JWT
-
-```
+| Endpoint | Descripción |
+|----------|-------------|
+| `POST /auth/registro` | Registra un nuevo usuario (genera un hash en la contraseña indicada) |
+| `POST /auth/login` | Inicia sesión en el sistema y devuelve un token JWT |
 
 ---
 
+### Administrador
+
+| Endpoint | Descripción |
+|----------|-------------|
+| `GET /administradores` | Devuelve una lista con los datos de los administradores (`id_administrador`, `pais_sede`, `fecha_asignado`) |
+| `POST /administradores` | Crea un nuevo administrador en el sistema (un perfil con el rol de administrador) |
+| `POST /administradores/cambiar-rol` | Tomando los datos del `id_perfil` y rol del usuario seleccionado, el administrador puede asignarle un nuevo rol (`general`, `funcionario` o `administrador`) |
+| `POST /administradores/verificaciones/responder` | Responde a las solicitudes de verificación de identificación de los usuarios recientemente registrados |
+
+---
+
+### General
+
+| Endpoint | Descripción |
+|----------|-------------|
+| `GET /generales` | Obtiene todos los usuarios con el rol de `general` |
+
+---
+
+### Funcionario
+
+| Endpoint | Descripción |
+|----------|-------------|
+| `GET /funcionarios` | Obtiene todos los usuarios con el rol de funcionario |
+| `GET /funcionarios/{id}/asignaciones` | Muestra todas las asignaciones a eventos del funcionario con el `id_perfil` dado |
+
+---
+
+### DispositivoEscaneo
+
+| Endpoint | Descripción |
+|----------|-------------|
+| `GET /dispositivos` | Obtiene todos los dispositivos de escaneo del sistema (`id`, `nro_serie`, `nro_legajo` del funcionario asignado) |
+| `POST /{id}/asignar` | Tomando el `id` del dispositivo, lo asigna al funcionario especificado por su nro de legajo |
+| `POST /{id}/desasignar` | Tomando el `id` y el `nro_legajo` del funcionario, elimina la relación de validación entre ambas entidades |
+
+---
+
+### Validacion
+
+| Endpoint | Descripción |
+|----------|-------------|
+| `GET /validaciones` | Retorna todas las agregaciones entre los dispositivos de escaneo con sus funcionarios asignados |
+| `GET /validaciones/{nroLegajoFuncionario}/{idDispositivoEscaneo}` | Retorna una instancia de la agregación especificando tanto el dispositivo como el funcionario |
+
+---
+
+### Estadio
+
+| Endpoint | Descripción |
+|----------|-------------|
+| `GET /estadios` | Obtiene el nombre y dirección de cada estadio |
+
+---
+
+### Partido
+
+| Endpoint | Descripción |
+|----------|-------------|
+| `GET /partidos` | Obtiene todos los partidos |
+| `GET /partidos/{fechaHora}` | Obtiene el partido correspondiente a la fecha y hora indicada |
+| `POST /partidos` | Crea un nuevo partido |
+| `DELETE /partidos/{fechaHora}` | Elimina el partido correspondiente a la fecha y hora indicada |
+
+---
+
+### Evento
+
+| Endpoint | Descripción |
+|----------|-------------|
+| `GET /eventos` | Retorna todos los eventos del sistema |
+| `PATCH /eventos/actualizar-estado` | Actualiza el estado de un evento (`activo` o `suspendido`) según las circunstancias del sistema |
+
+---
+
+### Equipo
+
+| Endpoint | Descripción |
+|----------|-------------|
+| `GET /equipos` | Devuelve todos los países participantes del torneo |
+| `POST /equipos` | Crea un nuevo equipo indicando el nombre del país |
+
+---
+
+### Venta
+
+| Endpoint | Descripción |
+|----------|-------------|
+| `GET /ventas` | Obtiene todas las ventas registradas |
+| `GET /ventas/usuario/{idGeneral}` | Obtiene las ventas realizadas por un usuario en específico |
+| `POST /ventas/comprar` | Controla la lógica y restricciones del sistema para comprar la cantidad justa de entradas |
+
+---
+
+### Entrada
+
+| Endpoint | Descripción |
+|----------|-------------|
+| `GET /entradas` | Devuelve todas las entradas del sistema (id, datos del comprador y evento al que asistirá) |
+| `POST /entradas/{id}/generar-token` | Genera el token necesario para la seguridad y validación de la entrada |
+
+---
+
+### TransfEntrada
+
+| Endpoint | Descripción |
+|----------|-------------|
+| `GET /transferencias-entrada` | Devuelve los datos de todas las transferencias de entradas realizadas |
+| `POST /transferencias-entrada/iniciar` | Inicia la transferencia de una entrada, cumpliendo con las restricciones del sistema |
+| `POST /transferencias-entrada/responder` | Responde a las transferencias solicitadas por otros usuarios |
+| `POST /transferencias-entrada/cancelar` | Rechaza las solicitudes de transferencia de entradas |
+| `GET /transferencias-entrada/pendientes/{idGeneral}` | Obtiene los movimientos pendientes correspondientes a un usuario en específico |
+| `GET /transferencias-entrada/historial/{idGeneral}` | Obtiene el historial completo de transferencias de entradas de un usuario |
+
+---
 ## Notas
 
 - El archivo `.env` está en `.gitignore` y **no debe commitearse**.

@@ -36,4 +36,11 @@ public class SectorEventoService {
     public List<SectorEvento> obtenerPorEvento(String estadio, String pais, String ciudad, LocalDateTime fecha) {
         return sectorEventoRepository.findByEvento(estadio, pais, ciudad, fecha);
     }
+
+    public Optional<SectorEvento> actualizarCosto(SectorEventoId id, java.math.BigDecimal nuevoCosto) {
+        return sectorEventoRepository.findById(id).map(se -> {
+            se.setCosto(nuevoCosto);
+            return sectorEventoRepository.save(se);
+        });
+    }
 }
