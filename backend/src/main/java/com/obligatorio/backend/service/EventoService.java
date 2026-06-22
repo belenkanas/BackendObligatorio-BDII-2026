@@ -50,4 +50,13 @@ public class EventoService {
     }
 
     public void eliminar(EventoId id) { eventoRepository.deleteById(id); }
+
+    // Actualizar el estado de un evento (activo/inactivo). 
+    // Cuando se suspende un evento, en lugar de eliminarlo, se le cambia el estado para inhabilitar la venta de entradas para el mismo.
+    public Optional<Evento> actualizarEstado(EventoId id, String nuevoEstado) {
+    return eventoRepository.findById(id).map(e -> {
+        e.setEstado(nuevoEstado);
+        return eventoRepository.save(e);
+    });
+}
 }

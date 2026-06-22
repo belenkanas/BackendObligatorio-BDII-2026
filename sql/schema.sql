@@ -77,6 +77,7 @@ CREATE TABLE evento (
     fecha_hora_partido TIMESTAMP,  
     nombre_pais_equipo_local VARCHAR(50),  
     nombre_pais_equipo_visitante VARCHAR(50),  
+    estado VARCHAR(20) NOT NULL DEFAULT 'activo',
   
     PRIMARY KEY (  
         estadio_nombre,  
