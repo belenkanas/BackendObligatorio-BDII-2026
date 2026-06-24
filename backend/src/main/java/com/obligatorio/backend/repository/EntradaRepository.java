@@ -22,6 +22,16 @@ public interface EntradaRepository extends JpaRepository<Entrada, Integer> {
         @Param("fecha") LocalDateTime fecha
     );
 
+    @Query("SELECT COUNT(e) FROM Entrada e WHERE e.estadioNombre = :estadio AND e.estadioDireccionPais = :pais AND e.estadioDireccionCiudad = :ciudad AND e.fechaHoraPartido = :fecha AND e.nombrePaisEquipoLocal = :local AND e.nombrePaisEquipoVisitante = :visitante AND e.estado IN ('activa', 'en_transferencia')")
+    long countEntradasEvento(
+        @Param("estadio") String estadio,
+        @Param("pais") String pais,
+        @Param("ciudad") String ciudad,
+        @Param("fecha") LocalDateTime fecha,
+        @Param("local") String local,
+        @Param("visitante") String visitante
+    );
+
     List<Entrada> findByIdGeneralPropietario(Integer idGeneralPropietario);
 
     List<Entrada> findByIdVenta(Integer idVenta);
