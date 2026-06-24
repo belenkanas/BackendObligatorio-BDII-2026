@@ -27,6 +27,9 @@ public class EventoController {
     @Autowired
     private EventoService eventoService;
 
+    @Autowired
+    private com.obligatorio.backend.service.AdministradorService administradorService;
+
     @GetMapping
     public List<Evento> obtenerTodos() { return eventoService.obtenerTodos(); }
 
@@ -35,6 +38,22 @@ public class EventoController {
         if (datos.getIdAdministrador() == null) {
             return ResponseEntity.badRequest().body("El id del administrador es obligatorio");
         }
+
+        // Verificar que el administrador existe y obtener su paisSede
+        var adminOpt = administradorService.obtenerPorId(datos.getIdAdministrador());
+        if (adminOpt.isEmpty()) {
+            return ResponseEntity.badRequest().body("Administrador no encontrado");
+        }
+
+        String paisSede = adminOpt.get().getPaisSede();
+        String paisEvento = datos.getId().getEstadioDireccionPais();
+
+        if (!paisSede.equals(paisEvento)) {
+            return ResponseEntity.badRequest().body(
+                "No tenés permisos para crear eventos en " + paisEvento + ". Tu país sede es " + paisSede + "."
+            );
+        }
+
         Evento evento = new Evento();
         evento.setId(datos.getId());
         Evento creado = eventoService.crear(evento, datos.getIdAdministrador());
