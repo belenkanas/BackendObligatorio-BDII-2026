@@ -116,7 +116,7 @@ public class TransfEntradaController {
 
         // verificar que el destinatario existe
         if (generalRepository.findById(idGeneralRecibe).isEmpty()) {
-            return ResponseEntity.badRequest().body("El usuario destinatario no existe");
+            return ResponseEntity.badRequest().body("El usuario destinatario no existe o no es usuario general");
         }
 
         // marcar entrada como en_transferencia
