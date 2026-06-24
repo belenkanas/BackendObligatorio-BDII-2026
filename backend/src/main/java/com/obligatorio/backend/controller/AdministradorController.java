@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.obligatorio.backend.dto.CrearAdministradorRequest;
 import com.obligatorio.backend.model.Administrador;
 import com.obligatorio.backend.model.Funcionario;
 import com.obligatorio.backend.model.General;
@@ -86,56 +85,6 @@ public class AdministradorController {
         return administradorService.obtenerPorId(id);
     }
 
-    //Función para crear un nuevo administrador, la idea es que solamente un admin pueda crear a otro admin, desde el frontend
-    //El endpoint es POST /administradores, y recibe un JSON con los datos del nuevo admin (mail, password y paisSede)
-    @Transactional
-    @PostMapping
-    public ResponseEntity<?> crear(@RequestBody CrearAdministradorRequest datos) {
-        if (datos.getMail() == null || datos.getMail().isBlank()) {
-            return ResponseEntity.badRequest().body("El correo electrónico es obligatorio");
-        }
-
-        if (datos.getPassword() == null || datos.getPassword().isBlank()) {
-            return ResponseEntity.badRequest().body("La contraseña es obligatoria");
-        }
-
-        if (datos.getPaisSede() == null || datos.getPaisSede().isBlank()) {
-            return ResponseEntity.badRequest().body("El pais sede es obligatorio");
-        }
-
-        String paisSede = datos.getPaisSede().trim();
-        if (!paisSede.equals("México") && !paisSede.equals("Estados Unidos") && !paisSede.equals("Canadá")) {
-            return ResponseEntity.badRequest().body("El pais sede debe ser uno de: México, Estados Unidos o Canadá");
-        }
-
-        String mail = datos.getMail().trim();
-        if (usuarioService.obtenerPorMail(mail).isPresent()) {
-            return ResponseEntity.badRequest().body("El correo electrónico ya está registrado");
-        }
-
-        Usuario usuario = new Usuario();
-        usuario.setMail(mail);
-        usuario.setPassword(passwordEncoder.encode(datos.getPassword()));
-        usuario.setDireccionPais(paisSede);
-        usuario.setDocumentoTipo("N/A");
-        usuario.setDocumentoNumeroDoc("N/A");
-        usuario.setDireccionCalle("N/A");
-        usuario.setDireccionNumero("N/A");
-        usuario.setDireccionCodigoPostal("N/A");
-        usuario.setDireccionLocalidad("N/A");
-        usuarioService.crear(usuario);
-
-        Perfil perfil = new Perfil();
-        perfil.setUsuario(usuario);
-        perfil = perfilService.crear(perfil);
-
-        Administrador administrador = new Administrador();
-        administrador.setPerfil(perfil);
-        administrador.setFecha_asignado(LocalDate.now());
-        administrador.setPaisSede(paisSede);
-
-        return ResponseEntity.ok(administradorService.crear(administrador));
-    }
 
     @DeleteMapping("/{id}")
     public void eliminar(@PathVariable Integer id) {
@@ -226,11 +175,36 @@ public class AdministradorController {
     @Transactional
     @PostMapping("/crear-admin-temporal")
     public ResponseEntity<?> crearAdminTemporal() {
-        CrearAdministradorRequest datos = new CrearAdministradorRequest();
-        datos.setMail("admin.test@mundial2026.com");
-        datos.setPassword("admin1234");
-        datos.setPaisSede("México");
-        return crear(datos);
+        String mail = "admin.test@mundial2026.com";
+        String password = "admin1234";
+        String paisSede = "México";
+
+        if (usuarioService.obtenerPorMail(mail).isPresent()) {
+            return ResponseEntity.badRequest().body("El administrador temporal ya existe");
+        }
+
+        Usuario usuario = new Usuario();
+        usuario.setMail(mail);
+        usuario.setPassword(passwordEncoder.encode(password));
+        usuario.setDireccionPais(paisSede);
+        usuario.setDocumentoTipo("N/A");
+        usuario.setDocumentoNumeroDoc("N/A");
+        usuario.setDireccionCalle("N/A");
+        usuario.setDireccionNumero("N/A");
+        usuario.setDireccionCodigoPostal("N/A");
+        usuario.setDireccionLocalidad("N/A");
+        usuarioService.crear(usuario);
+
+        Perfil perfil = new Perfil();
+        perfil.setUsuario(usuario);
+        perfil = perfilService.crear(perfil);
+
+        Administrador administrador = new Administrador();
+        administrador.setPerfil(perfil);
+        administrador.setFecha_asignado(LocalDate.now());
+        administrador.setPaisSede(paisSede);
+
+        return ResponseEntity.ok(administradorService.crear(administrador));
     }
 
     @GetMapping("/verificaciones/pendientes")

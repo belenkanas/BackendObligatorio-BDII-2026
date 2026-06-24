@@ -24,22 +24,34 @@ public class FuncionarioAsignadoASectorService {
         return funcionarioAsignadoASectorRepository.findById(id);
     }
 
-public FuncionarioAsignadoASector crear(FuncionarioAsignadoASector funcionarioAsignadoASector) {
-    String nroLegajo = funcionarioAsignadoASector.getId().getNroLegajo();
-    java.time.LocalDateTime fechaNueva = funcionarioAsignadoASector.getId().getFechaHoraPartido();
+    public FuncionarioAsignadoASector crear(FuncionarioAsignadoASector funcionarioAsignadoASector) {
+        String nroLegajo = funcionarioAsignadoASector.getId().getNroLegajo();
+        java.time.LocalDateTime fechaNueva = funcionarioAsignadoASector.getId().getFechaHoraPartido();
+        String estadioNuevo = funcionarioAsignadoASector.getId().getEstadioNombre();
 
-    // Verificar que el funcionario no esté ya asignado a otro evento en la misma fecha_hora_partido
-    List<FuncionarioAsignadoASector> asignacionesExistentes = funcionarioAsignadoASectorRepository.findByIdNroLegajo(nroLegajo);
-    boolean conflicto = asignacionesExistentes.stream()
-        .anyMatch(a -> a.getId().getFechaHoraPartido().equals(fechaNueva)
-            && !a.getId().getEstadioNombre().equals(funcionarioAsignadoASector.getId().getEstadioNombre()));
+        List<FuncionarioAsignadoASector> asignacionesExistentes = funcionarioAsignadoASectorRepository.findByIdNroLegajo(nroLegajo);
 
-    if (conflicto) {
-        throw new IllegalStateException("El funcionario ya tiene un evento asignado en esa fecha y hora en otro estadio.");
+        boolean conflicto = asignacionesExistentes.stream()
+            .anyMatch(a -> {
+                java.time.LocalDateTime fechaExistente = a.getId().getFechaHoraPartido();
+                String estadioExistente = a.getId().getEstadioNombre();
+
+                // Si es el mismo estadio y evento, no es conflicto (es el mismo evento, diferente sector)
+                if (estadioExistente.equals(estadioNuevo) && fechaExistente.equals(fechaNueva)) {
+                    return false;
+                }
+
+                // Verificar si hay solapamiento en rango de 2 horas
+                long diferenciaMinutos = Math.abs(java.time.Duration.between(fechaExistente, fechaNueva).toMinutes());
+                return diferenciaMinutos < 120;
+            });
+
+        if (conflicto) {
+            throw new IllegalStateException("El funcionario ya tiene un evento asignado en un horario cercano (dentro de 2 horas). No se puede asignar.");
+        }
+
+        return funcionarioAsignadoASectorRepository.save(funcionarioAsignadoASector);
     }
-
-    return funcionarioAsignadoASectorRepository.save(funcionarioAsignadoASector);
-}
 
     public void eliminar(FuncionarioAsignadoASectorId id) {
         funcionarioAsignadoASectorRepository.deleteById(id);
