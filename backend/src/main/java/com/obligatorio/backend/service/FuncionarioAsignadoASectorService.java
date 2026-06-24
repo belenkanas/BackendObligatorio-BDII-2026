@@ -24,9 +24,22 @@ public class FuncionarioAsignadoASectorService {
         return funcionarioAsignadoASectorRepository.findById(id);
     }
 
-    public FuncionarioAsignadoASector crear(FuncionarioAsignadoASector funcionarioAsignadoASector) {
-        return funcionarioAsignadoASectorRepository.save(funcionarioAsignadoASector);
+public FuncionarioAsignadoASector crear(FuncionarioAsignadoASector funcionarioAsignadoASector) {
+    String nroLegajo = funcionarioAsignadoASector.getId().getNroLegajo();
+    java.time.LocalDateTime fechaNueva = funcionarioAsignadoASector.getId().getFechaHoraPartido();
+
+    // Verificar que el funcionario no esté ya asignado a otro evento en la misma fecha_hora_partido
+    List<FuncionarioAsignadoASector> asignacionesExistentes = funcionarioAsignadoASectorRepository.findByIdNroLegajo(nroLegajo);
+    boolean conflicto = asignacionesExistentes.stream()
+        .anyMatch(a -> a.getId().getFechaHoraPartido().equals(fechaNueva)
+            && !a.getId().getEstadioNombre().equals(funcionarioAsignadoASector.getId().getEstadioNombre()));
+
+    if (conflicto) {
+        throw new IllegalStateException("El funcionario ya tiene un evento asignado en esa fecha y hora en otro estadio.");
     }
+
+    return funcionarioAsignadoASectorRepository.save(funcionarioAsignadoASector);
+}
 
     public void eliminar(FuncionarioAsignadoASectorId id) {
         funcionarioAsignadoASectorRepository.deleteById(id);

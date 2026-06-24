@@ -47,10 +47,14 @@ public class FuncionarioAsignadoASectorController {
         return funcionarioAsignadoASectorService.obtenerPorId(id);
     }
 
-    @PostMapping
-    public FuncionarioAsignadoASector crear(@RequestBody FuncionarioAsignadoASector funcionarioAsignadoASector) {
-        return funcionarioAsignadoASectorService.crear(funcionarioAsignadoASector);
+@PostMapping
+public ResponseEntity<?> crear(@RequestBody FuncionarioAsignadoASector funcionarioAsignadoASector) {
+    try {
+        return ResponseEntity.ok(funcionarioAsignadoASectorService.crear(funcionarioAsignadoASector));
+    } catch (IllegalStateException e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
     }
+}
 
     @DeleteMapping("/{nroLegajo}/{nombreSector}/{estadioNombre}/{estadioDireccionPais}/{estadioDireccionCiudad}")
     public void eliminar(
