@@ -117,4 +117,19 @@ public class EntradaController {
 
         return ResponseEntity.ok(Map.of("qr", qr, "caducidad", caducidad.toString()));
     }
+
+    @PostMapping("/existen-compras-sector")
+    public ResponseEntity<Boolean> existenComprasSector(
+            @RequestBody Map<String, String> datos) {
+
+        long cantidad = entradaRepository.countBySectorEvento(
+            datos.get("nombreSector"),
+            datos.get("estadioNombre"),
+            datos.get("estadioDireccionPais"),
+            datos.get("estadioDireccionCiudad"),
+            LocalDateTime.parse(datos.get("fechaHoraPartido"))
+        );
+
+        return ResponseEntity.ok(cantidad > 0);
+    }
 }
