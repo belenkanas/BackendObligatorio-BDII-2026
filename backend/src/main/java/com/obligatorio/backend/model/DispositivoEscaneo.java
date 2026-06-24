@@ -1,4 +1,3 @@
-// model/DispositivoEscaneo.java
 package com.obligatorio.backend.model;
 
 import jakarta.persistence.Column;
