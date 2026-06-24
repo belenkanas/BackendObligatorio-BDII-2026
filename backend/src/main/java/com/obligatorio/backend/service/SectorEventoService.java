@@ -67,6 +67,12 @@ public class SectorEventoService {
 
     public Optional<SectorEvento> actualizarCosto(SectorEventoId id, BigDecimal nuevoCosto, Integer idAdministrador) {
         validarPaisSede(id.getEstadioDireccionPais(), idAdministrador);
+        
+        sectorEventoRepository.findById(id)
+        .orElseThrow(() -> new IllegalArgumentException(
+            "El sector no está habilitado para este evento"
+        ));
+        
         validarEventoActivo(id);
 
         return sectorEventoRepository.findById(id).map(se -> {
@@ -81,8 +87,7 @@ public class SectorEventoService {
         eventoId.setEstadioDireccionPais(id.getEstadioDireccionPais());
         eventoId.setEstadioDireccionCiudad(id.getEstadioDireccionCiudad());
         eventoId.setFechaHoraPartido(id.getFechaHoraPartido());
-        // Los campos de equipos no son parte de SectorEventoId, 
-        // así que buscamos por estadio + fecha directamente
+       
         Evento evento = eventoRepository
             .findByEstadioYFecha(
                 id.getEstadioNombre(),
