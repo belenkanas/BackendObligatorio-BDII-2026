@@ -18,6 +18,8 @@ import com.obligatorio.backend.dto.CrearEventoRequest;
 import com.obligatorio.backend.model.Evento;
 import com.obligatorio.backend.model.EventoId;
 import com.obligatorio.backend.service.EventoService;
+import com.obligatorio.backend.repository.EntradaRepository;
+import com.obligatorio.backend.repository.FuncionarioAsignadoASectorRepository;
 
 @RestController
 @RequestMapping("/eventos")
@@ -28,7 +30,10 @@ public class EventoController {
     private EventoService eventoService;
 
     @Autowired
-    private com.obligatorio.backend.service.AdministradorService administradorService;
+    private EntradaRepository entradaRepository;
+
+    @Autowired
+    private FuncionarioAsignadoASectorRepository funcionarioRepository;
 
     @GetMapping
     public List<Evento> obtenerTodos() { return eventoService.obtenerTodos(); }
@@ -38,22 +43,6 @@ public class EventoController {
         if (datos.getIdAdministrador() == null) {
             return ResponseEntity.badRequest().body("El id del administrador es obligatorio");
         }
-
-        // Verificar que el administrador existe y obtener su paisSede
-        var adminOpt = administradorService.obtenerPorId(datos.getIdAdministrador());
-        if (adminOpt.isEmpty()) {
-            return ResponseEntity.badRequest().body("Administrador no encontrado");
-        }
-
-        String paisSede = adminOpt.get().getPaisSede();
-        String paisEvento = datos.getId().getEstadioDireccionPais();
-
-        if (!paisSede.equals(paisEvento)) {
-            return ResponseEntity.badRequest().body(
-                "No tenés permisos para crear eventos en " + paisEvento + ". Tu país sede es " + paisSede + "."
-            );
-        }
-
         Evento evento = new Evento();
         evento.setId(datos.getId());
         Evento creado = eventoService.crear(evento, datos.getIdAdministrador());
@@ -78,9 +67,38 @@ public class EventoController {
                 return ResponseEntity.badRequest().body("Estado inválido. Debe ser 'activo' o 'suspendido'");
             }
 
-            return eventoService.actualizarEstado(id, nuevoEstado)
-                .map(e -> ResponseEntity.ok((Object) e))
-                .orElse(ResponseEntity.badRequest().body("Evento no encontrado"));
+            // se verifica que no haya entradas vendidas para ese evento
+            if(nuevoEstado.equals("suspendido")){
+                long entradas = entradaRepository.countEntradasEvento(
+                id.getEstadioNombre(),
+                id.getEstadioDireccionPais(),
+                id.getEstadioDireccionCiudad(),
+                id.getFechaHoraPartido(),
+                id.getNombrePaisEquipoLocal(),
+                id.getNombrePaisEquipoVisitante()
+            );
+
+            // si hay entradas, no suspende
+            if (entradas > 0) {
+                return ResponseEntity.badRequest().body("No se puede suspender el evento porque tiene entradas compradas");
+            }
+
+            // se verifica si no hay funcionarios asignados
+            long funcionarios = funcionarioRepository.countFuncionariosPorEvento(
+                id.getEstadioNombre(),
+                id.getEstadioDireccionPais(),
+                id.getEstadioDireccionCiudad(),
+                id.getFechaHoraPartido()
+            );
+
+            // si hay funcionarios, no se suspende
+            if (funcionarios > 0) {
+                return ResponseEntity.badRequest().body("No se puede suspender el evento porque tiene funcionarios asignados");
+            }
+            }
+
+            return eventoService.actualizarEstado(id, nuevoEstado).map(e -> ResponseEntity.ok((Object) e)).orElse(ResponseEntity.badRequest().body("Evento no encontrado"));
+            
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error al actualizar el estado: " + e.getMessage());
         }
