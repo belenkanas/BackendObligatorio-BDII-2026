@@ -21,8 +21,9 @@ import com.obligatorio.backend.model.TokenEscaneadoValido;
 import com.obligatorio.backend.model.TokenEscaneadoValidoId;
 import com.obligatorio.backend.repository.EntradaRepository;
 import com.obligatorio.backend.repository.EntradaTieneTokenRepository;
-import com.obligatorio.backend.repository.TokenRepository;
+import com.obligatorio.backend.repository.FuncionarioAsignadoASectorRepository;
 import com.obligatorio.backend.repository.TokenEscaneadoValidoRepository;
+import com.obligatorio.backend.repository.TokenRepository;
 import com.obligatorio.backend.service.FuncionarioService;
 
 @RestController
@@ -44,6 +45,9 @@ public class ValidacionEscaneoController {
 
     @Autowired
     private FuncionarioService funcionarioService;
+
+    @Autowired
+    private FuncionarioAsignadoASectorRepository funcionarioAsignadoASectorRepository;
 
     @Transactional
     @PostMapping("/escanear")
@@ -85,15 +89,30 @@ public class ValidacionEscaneoController {
         }
 
         Entrada entrada = entradaOpt.get();
-        if (!"activa".equals(entrada.getEstado())) {
-            return ResponseEntity.badRequest().body("La entrada no está activa (estado actual: " + entrada.getEstado() + ")");
-        }
 
         Optional<Funcionario> funcionarioOpt = funcionarioService.obtenerPorId(idFuncionario);
         if (funcionarioOpt.isEmpty()) {
             return ResponseEntity.badRequest().body("Funcionario no encontrado");
         }
         String nroLegajo = funcionarioOpt.get().getNroLegajo();
+        
+        boolean estaAsignado = funcionarioAsignadoASectorRepository.existeAsignacion(
+            nroLegajo,
+            entrada.getNombreSector(),
+            entrada.getEstadioNombre(),
+            entrada.getEstadioDireccionPais(),
+            entrada.getEstadioDireccionCiudad(),
+            entrada.getFechaHoraPartido()
+        );
+
+        if (!estaAsignado) {
+            return ResponseEntity.badRequest().body(
+                "No tenés permiso para validar entradas del sector " + entrada.getNombreSector()
+            );
+        }
+        if (!"activa".equals(entrada.getEstado())) {
+            return ResponseEntity.badRequest().body("La entrada no está activa (estado actual: " + entrada.getEstado() + ")");
+        }
 
         token.setValido(false);
         tokenRepository.save(token);
