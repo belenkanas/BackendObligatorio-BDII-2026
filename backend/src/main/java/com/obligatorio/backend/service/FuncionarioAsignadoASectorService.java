@@ -36,18 +36,16 @@ public class FuncionarioAsignadoASectorService {
                 java.time.LocalDateTime fechaExistente = a.getId().getFechaHoraPartido();
                 String estadioExistente = a.getId().getEstadioNombre();
 
-                // Si es el mismo estadio y evento, no es conflicto (es el mismo evento, diferente sector)
                 if (estadioExistente.equals(estadioNuevo) && fechaExistente.equals(fechaNueva)) {
                     return false;
                 }
 
-                // Verificar si hay solapamiento en rango de 2 horas
                 long diferenciaMinutos = Math.abs(java.time.Duration.between(fechaExistente, fechaNueva).toMinutes());
                 return diferenciaMinutos < 120;
             });
 
         if (conflicto) {
-            throw new IllegalStateException("El funcionario ya tiene un evento asignado en un horario cercano (dentro de 2 horas). No se puede asignar.");
+            throw new IllegalStateException("El funcionario ya tiene un evento asignado en un horario cercano. No se puede asignar.");
         }
 
         return funcionarioAsignadoASectorRepository.save(funcionarioAsignadoASector);
